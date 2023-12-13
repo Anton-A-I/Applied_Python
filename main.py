@@ -70,6 +70,49 @@ db = duckdb.query(q).to_df()
 # fig_gender.add_trace(go.Pie(labels = gender['Пол'], values = gender['Кол-во'], marker_colors=['#f72585', '#4361ee']))
 # fig_gender.update_layout( title='Распределение людей по полу')
 # fig_gender.show()
+# selected_genders = st.selectbox('Выберите пол', ['Мужчины', 'Женщины', 'Все'])
+#
+# if selected_genders == 'Мужчины':
+#     gender_filter = 1
+# elif selected_genders == 'Женщины':
+#     gender_filter = 0
+# else:
+#     gender_filter = '1,0'
+# # age_filter = st.slider('Фильтр по возрасту', 0, 100, (0, 100))
+# q3 = '''
+# SELECT EDUCATION as "Образование",
+# COUNT(EDUCATION) as "Кол-во"
+# FROM db
+# WHERE GENDER in ({})
+# GROUP BY  "Образование"
+# ORDER BY "Кол-во" DESC
+# '''.format(gender_filter if gender_filter in [0, 1] else '0, 1')
+#
+# education_data = duckdb.query(q3).to_df()
+#
+# fig_education = go.Figure()
+# fig_education.add_trace(go.Pie(labels=education_data['Образование'], values=education_data['Кол-во'], marker_colors=['#f72585', '#7209b7', '#3a0ca3', '#4361ee', '#4cc9f0', '#560badff']))
+# fig_education.update_layout( title='Распределение людей по уровню образования')
+# st.plotly_chart(fig_education)
+
+def get_education_data(gender_filter):
+    q = '''
+    SELECT EDUCATION as "Образование",
+    COUNT(EDUCATION) as "Кол-во" 
+    FROM db
+    WHERE GENDER in ({})
+    GROUP BY "Образование"
+    ORDER BY "Кол-во" DESC 
+    '''.format(gender_filter )
+    education_data = duckdb.query(q).to_df()
+    return education_data
+
+def plot_education_pie_chart(education_data):
+    fig = go.Figure()
+    fig.add_trace(go.Pie(labels=education_data['Образование'], values=education_data['Кол-во'], marker_colors=['#f72585', '#7209b7', '#3a0ca3', '#4361ee', '#4cc9f0', '#560badff']))
+    fig.update_layout(title='Распределение людей по уровню образования')
+    return fig
+
 selected_genders = st.selectbox('Выберите пол', ['Мужчины', 'Женщины', 'Все'])
 
 if selected_genders == 'Мужчины':
@@ -77,20 +120,9 @@ if selected_genders == 'Мужчины':
 elif selected_genders == 'Женщины':
     gender_filter = 0
 else:
-    gender_filter = '1,0'
-# age_filter = st.slider('Фильтр по возрасту', 0, 100, (0, 100))
-q3 = '''
-SELECT EDUCATION as "Образование",
-COUNT(EDUCATION) as "Кол-во" 
-FROM db
-WHERE GENDER in ({})
-GROUP BY  "Образование"
-ORDER BY "Кол-во" DESC 
-'''.format(gender_filter if gender_filter in [0, 1] else '0, 1')
+    gender_filter = '0, 1'
 
-education_data = duckdb.query(q3).to_df()
+education_data = get_education_data(gender_filter)
+fig_education = plot_education_pie_chart(education_data)
 
-fig_education = go.Figure()
-fig_education.add_trace(go.Pie(labels=education_data['Образование'], values=education_data['Кол-во'], marker_colors=['#f72585', '#7209b7', '#3a0ca3', '#4361ee', '#4cc9f0', '#560badff']))
-fig_education.update_layout( title='Распределение людей по уровню образования')
 st.plotly_chart(fig_education)
