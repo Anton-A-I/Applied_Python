@@ -70,7 +70,7 @@ db = duckdb.query(q).to_df()
 # fig_gender.add_trace(go.Pie(labels = gender['Пол'], values = gender['Кол-во'], marker_colors=['#f72585', '#4361ee']))
 # fig_gender.update_layout( title='Распределение людей по полу')
 # fig_gender.show()
-selected_genders = st.multiselect('Выберите пол', ['Мужчины', 'Женщины', 'Все'])
+selected_genders = st.selectbox('Выберите пол', ['Мужчины', 'Женщины', 'Все'])
 
 if selected_genders == 'Мужчины':
     gender_filter = 1
@@ -93,4 +93,4 @@ education_data = duckdb.query(q3).to_df()
 fig_education = go.Figure()
 fig_education.add_trace(go.Pie(labels=education_data['Образование'], values=education_data['Кол-во'], marker_colors=['#f72585', '#7209b7', '#3a0ca3', '#4361ee', '#4cc9f0', '#560badff']))
 fig_education.update_layout( title='Распределение людей по уровню образования')
-fig_education.show()
+st.plotly_chart(fig_education)
