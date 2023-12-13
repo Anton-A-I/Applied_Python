@@ -46,7 +46,7 @@ st.image(image, caption='Пример картинки', use_column_width=True)
 
 tab1, tab2 = st.tabs(['Таблица', 'Разведочный анализ'])
 
-selected_tab = st.selectbox('Выберите вкладку', tabs)
+# selected_tab = st.selectbox('Выберите вкладку', tabs)
 with tab1:
 
     gender_1 = st.checkbox('Мужчины')
