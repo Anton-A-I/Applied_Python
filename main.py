@@ -6,6 +6,7 @@ import plotly.express as px
 import streamlit as st
 import plotly.graph_objects as go
 import plotly as plt
+from PIL import Image
 
 D_clients = duckdb.read_csv('datasets/D_clients.csv')
 D_job = duckdb.read_csv('datasets/D_job.csv')
@@ -32,6 +33,35 @@ JOIN D_pens ON D_clients.SOCSTATUS_PENS_FL = D_pens.ID
 --FROM D_pens
 '''
 db = duckdb.query(q).to_df()
+
+
+
+
+st.title('Анализ клиентов банка')
+st.write('Это приложение позволяет провести разведочный анализ данных, софрмировать портрет клиентов, '
+         'выявить зависимости между признаками клиента и его склонности к положительному или отрицательному отклику на предложение банка.')
+
+image = Image.open('img_1.png')
+st.image(image, caption='Пример картинки', use_column_width=True)
+
+
+tabs = ['Таблица', 'Разведочный анализ']
+selected_tab = st.selectbox('Выберите вкладку', tabs)
+if selected_tab == 'Таблица':
+
+    gender_1 = st.checkbox('Мужчины')
+    gender_0 = st.checkbox('Женщины')
+    age_filter = st.slider('Фильтр по возрасту', 0, 100, (0, 100))
+    filtered_df = db[(db['AGE'] >= age_filter[0]) & (db['AGE'] <= age_filter[1])]
+    if gender_1:
+        filtred_gender = filtred_df[(filtred_df['GENDER'] == 1)]
+    elif gender_0:
+        filtred_gender = filtred_df[(filtred_df['GENDER'] == 0)]
+    else:
+        filtred_gender = filtred_df[(filtred_df['GENDER'] == 1) & (filtred_df['GENDER'] == 0)]
+else:
+    st.write('Разведочный анализ')
+
 
 # gender_mapping = {0: 'Женщина', 1: 'Мужчина'}
 # db['GENDER'] = db['GENDER'].map(gender_mapping)
@@ -95,34 +125,34 @@ db = duckdb.query(q).to_df()
 # fig_education.update_layout( title='Распределение людей по уровню образования')
 # st.plotly_chart(fig_education)
 
-def get_education_data(gender_filter):
-    q = '''
-    SELECT EDUCATION as "Образование",
-    COUNT(EDUCATION) as "Кол-во" 
-    FROM db
-    WHERE GENDER in ({})
-    GROUP BY "Образование"
-    ORDER BY "Кол-во" DESC 
-    '''.format(gender_filter )
-    education_data = duckdb.query(q).to_df()
-    return education_data
+    def get_education_data(gender_filter):
+        q = '''
+        SELECT EDUCATION as "Образование",
+        COUNT(EDUCATION) as "Кол-во" 
+        FROM db
+        WHERE GENDER in ({})
+        GROUP BY "Образование"
+        ORDER BY "Кол-во" DESC 
+        '''.format(gender_filter )
+        education_data = duckdb.query(q).to_df()
+        return education_data
 
-def plot_education_pie_chart(education_data):
-    fig = go.Figure()
-    fig.add_trace(go.Pie(labels=education_data['Образование'], values=education_data['Кол-во'], marker_colors=['#f72585', '#7209b7', '#3a0ca3', '#4361ee', '#4cc9f0', '#560badff']))
-    fig.update_layout(title='Распределение людей по уровню образования')
-    return fig
+    def plot_education_pie_chart(education_data):
+        fig = go.Figure()
+        fig.add_trace(go.Pie(labels=education_data['Образование'], values=education_data['Кол-во'], marker_colors=['#f72585', '#7209b7', '#3a0ca3', '#4361ee', '#4cc9f0', '#560badff']))
+        fig.update_layout(title='Распределение людей по уровню образования')
+        return fig
 
-selected_genders = st.selectbox('Выберите пол', ['Мужчины', 'Женщины', 'Все'])
+    selected_genders = st.selectbox('Выберите пол', ['Мужчины', 'Женщины', 'Все'])
 
-if selected_genders == 'Мужчины':
-    gender_filter = 1
-elif selected_genders == 'Женщины':
-    gender_filter = 0
-else:
-    gender_filter = '0, 1'
+    if selected_genders == 'Мужчины':
+        gender_filter = 1
+    elif selected_genders == 'Женщины':
+        gender_filter = 0
+    else:
+        gender_filter = '0, 1'
 
-education_data = get_education_data(gender_filter)
-fig_education = plot_education_pie_chart(education_data)
+    education_data = get_education_data(gender_filter)
+    fig_education = plot_education_pie_chart(education_data)
 
-st.plotly_chart(fig_education)
+    st.plotly_chart(fig_education)
