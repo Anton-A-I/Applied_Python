@@ -44,10 +44,10 @@ st.write('Это приложение позволяет провести раз
 image = Image.open('img_1.png')
 st.image(image, caption='Пример картинки', use_column_width=True)
 
+tab1, tab2 = st.tabs(['Таблица', 'Разведочный анализ'])
 
-tabs = ['Таблица', 'Разведочный анализ']
 selected_tab = st.selectbox('Выберите вкладку', tabs)
-if selected_tab == 'Таблица':
+with tab1:
 
     gender_1 = st.checkbox('Мужчины')
     gender_0 = st.checkbox('Женщины')
@@ -58,8 +58,8 @@ if selected_tab == 'Таблица':
     elif gender_0:
         filtred_gender = filtred_df[(filtred_df['GENDER'] == 0)]
     else:
-        filtred_df
-else:
+        pass
+with tab2:
     st.write('Разведочный анализ')
 
 
