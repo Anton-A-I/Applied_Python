@@ -4,6 +4,8 @@ import duckdb
 import seaborn as sns
 import plotly.express as px
 import streamlit as st
+import plotly.graph_objects as go
+import plotly as plt
 
 D_clients = duckdb.read_csv('datasets/D_clients.csv')
 D_job = duckdb.read_csv('datasets/D_job.csv')
@@ -30,6 +32,11 @@ JOIN D_pens ON D_clients.SOCSTATUS_PENS_FL = D_pens.ID
 --FROM D_pens
 '''
 db = duckdb.query(q).to_df()
+
+# gender_mapping = {0: 'Женщина', 1: 'Мужчина'}
+# db['GENDER'] = db['GENDER'].map(gender_mapping)
+
+
 
 # q1 = '''
 # SELECT AGE, COUNT(AGE) as COUNT,
@@ -63,17 +70,23 @@ db = duckdb.query(q).to_df()
 # fig_gender.add_trace(go.Pie(labels = gender['Пол'], values = gender['Кол-во'], marker_colors=['#f72585', '#4361ee']))
 # fig_gender.update_layout( title='Распределение людей по полу')
 # fig_gender.show()
+selected_genders = st.multiselect('Выберите пол', ['Мужчины', 'Женщины', 'Все'])
 
-gender_filter = st.selectbox('Фильтр по полу', db['GENDER'])
+if selected_genders == 'Мужчины':
+    gender_filter = 1
+elif selected_genders == 'Женщины':
+    gender_filter = 0
+else:
+    gender_filter = '1,0'
 # age_filter = st.slider('Фильтр по возрасту', 0, 100, (0, 100))
 q3 = '''
 SELECT EDUCATION as "Образование",
 COUNT(EDUCATION) as "Кол-во" 
 FROM db
-WHERE GENDER = '{gender_filter}'
+WHERE GENDER in ({})
 GROUP BY  "Образование"
 ORDER BY "Кол-во" DESC 
-'''
+'''.format(gender_filter if gender_filter in [0, 1] else '0, 1')
 
 education_data = duckdb.query(q3).to_df()
 
