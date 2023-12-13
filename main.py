@@ -58,7 +58,7 @@ if selected_tab == 'Таблица':
     elif gender_0:
         filtred_gender = filtred_df[(filtred_df['GENDER'] == 0)]
     else:
-        filtred_gender = filtred_df
+        filtred_df
 else:
     st.write('Разведочный анализ')
 
