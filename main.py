@@ -5,15 +5,15 @@ import seaborn as sns
 import plotly.express as px
 import streamlit as st
 
-D_clients = duckdb.read_csv('datasets\D_clients.csv')
-D_job = duckdb.read_csv('datasets\D_job.csv')
-D_loan = duckdb.read_csv('datasets\D_loan.csv')
-D_pens = duckdb.read_csv('datasets\D_pens.csv')
-D_work = duckdb.read_csv('datasets\D_work.csv')
-D_close_loan = duckdb.read_csv('datasets\D_close_loan.csv')
-D_last_credit = duckdb.read_csv('datasets\D_last_credit.csv')
-D_salary = duckdb.read_csv('datasets\D_salary.csv')
-D_target = duckdb.read_csv('datasets\D_target.csv')
+D_clients = duckdb.read_csv('datasets/D_clients.csv')
+D_job = duckdb.read_csv('datasets/D_job.csv')
+D_loan = duckdb.read_csv('datasets/D_loan.csv')
+D_pens = duckdb.read_csv('datasets/D_pens.csv')
+D_work = duckdb.read_csv('datasets/D_work.csv')
+D_close_loan = duckdb.read_csv('datasets/D_close_loan.csv')
+D_last_credit = duckdb.read_csv('datasets/D_last_credit.csv')
+D_salary = duckdb.read_csv('datasets/D_salary.csv')
+D_target = duckdb.read_csv('datasets/D_target.csv')
 
 q = '''
 SELECT DISTINCT *
