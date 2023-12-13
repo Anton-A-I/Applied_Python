@@ -55,10 +55,12 @@ with tab1:
     filtered_df = db[(db['AGE'] >= age_filter[0]) & (db['AGE'] <= age_filter[1])]
     if gender_1:
         filtred_gender = filtred_df[(filtred_df['GENDER'] == 1)]
+        st.dataframe(filtered_gender)
     elif gender_0:
         filtred_gender = filtred_df[(filtred_df['GENDER'] == 0)]
+        st.dataframe(filtered_gender)
     else:
-        pass
+        st.dataframe(filtered_df)
 with tab2:
     st.write('Разведочный анализ')
 
