@@ -49,15 +49,15 @@ with tab1:
     target_1 = st.checkbox('Откликнулись на предложение банка')
     target_0 = st.checkbox('Отказались от предложения банка')
     # age_filter = st.slider('Фильтр по возрасту', 0, 100, (0, 100))
-    filtered_df = db
+
     if target_1 & target_0:
-        filtered_df = db
+        filtred_df = db
 
     if target_1:  # Если пользователь выбрал только мужчин
-        filtered_df = db[db['TARGET'] == 1]
+        filtred_df = db[db['TARGET'] == 1]
 
     elif target_0:  # Если пользователь выбрал только женщин
-        filtered_df = db[db['TARGET'] == 0]
+        filtred_df = db[db['TARGET'] == 0]
 
     else:
         filtered_df = db
