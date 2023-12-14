@@ -50,6 +50,9 @@ with tab1:
     target_0 = st.checkbox('Отказались от предложения банка')
     # age_filter = st.slider('Фильтр по возрасту', 0, 100, (0, 100))
 
+    if target_1 & target_0:
+        filtered_df = db
+        st.dataframe(db)
     if target_1:  # Если пользователь выбрал только мужчин
         filtered_df = db[db['TARGET'] == 1]
         st.dataframe(filtered_df)
@@ -58,7 +61,7 @@ with tab1:
         st.dataframe(filtered_df)
     else:
         filtered_df = db
-        st.dataframe(filtered_df)
+        st.dataframe(db)
 
     # if age_filter[0] == 0 and age_filter[1] == 100:
         # if gender_1 and gender_0:  # Если пользователь выбрал оба значения пола
