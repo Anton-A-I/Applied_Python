@@ -59,7 +59,7 @@ with tab1:
         #     filtered_df = db[db['GENDER'] == 0]
         # else:  # Если пользователь не выбрал значения пола
         filtered_df = db
-        st.dataframe(filtered_df)
+
     else:  # Если пользователь выбрал фильтр по возрасту
         filtered_df = db[(db['AGE'] >= age_filter[0]) & (db['AGE'] <= age_filter[1])]
         st.dataframe(filtered_df)
