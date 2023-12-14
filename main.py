@@ -51,10 +51,10 @@ with tab1:
     # age_filter = st.slider('Фильтр по возрасту', 0, 100, (0, 100))
 
     if target_1:  # Если пользователь выбрал только мужчин
-        filtered_df = db[filtered_df['TARGET'] == 1]
+        filtered_df = db[db['TARGET'] == 1]
         st.dataframe(filtered_df)
     elif target_0:  # Если пользователь выбрал только женщин
-        filtered_df = db[filtered_df['TARGET'] == 0]
+        filtered_df = db[db['TARGET'] == 0]
         st.dataframe(filtered_df)
     else:
         filtered_df = db
