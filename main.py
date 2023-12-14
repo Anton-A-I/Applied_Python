@@ -34,9 +34,6 @@ JOIN D_pens ON D_clients.SOCSTATUS_PENS_FL = D_pens.ID
 '''
 db = duckdb.query(q).to_df()
 
-
-
-
 st.title('Анализ клиентов банка')
 st.write('Это приложение позволяет провести разведочный анализ данных, софрмировать портрет клиентов, '
          'выявить зависимости между признаками клиента и его склонности к положительному или отрицательному отклику на предложение банка.')
@@ -52,15 +49,38 @@ with tab1:
     gender_1 = st.checkbox('Мужчины')
     gender_0 = st.checkbox('Женщины')
     age_filter = st.slider('Фильтр по возрасту', 0, 100, (0, 100))
-    filtered_df = db[(db['AGE'] >= age_filter[0]) & (db['AGE'] <= age_filter[1])]
-    if gender_1:
-        filtred_gender = filtred_df[(filtred_df['GENDER'] == 1)]
-        st.dataframe(filtered_gender)
-    elif gender_0:
-        filtred_gender = filtred_df[(filtred_df['GENDER'] == 0)]
-        st.dataframe(filtered_gender)
-    else:
+
+    if age_filter[0] == 0 and age_filter[1] == 100:
+        # if gender_1 and gender_0:  # Если пользователь выбрал оба значения пола
+        #     filtered_df = db
+        # elif gender_1:  # Если пользователь выбрал только мужчин
+        #     filtered_df = db[db['GENDER'] == 1]
+        # elif gender_0:  # Если пользователь выбрал только женщин
+        #     filtered_df = db[db['GENDER'] == 0]
+        # else:  # Если пользователь не выбрал значения пола
+        filtered_df = db
         st.dataframe(filtered_df)
+    else:  # Если пользователь выбрал фильтр по возрасту
+        filtered_df = db[(db['AGE'] >= age_filter[0]) & (db['AGE'] <= age_filter[1])]
+        st.dataframe(filtered_df)
+        if gender_1:  # Если пользователь выбрал только мужчин
+            filtered_df = filtered_df[filtered_df['GENDER'] == 1]
+            st.dataframe(filtered_df)
+        elif gender_0:  # Если пользователь выбрал только женщин
+            filtered_df = filtered_df[filtered_df['GENDER'] == 0]
+            st.dataframe(filtered_df)
+        else:
+            filtered_df = db[(db['AGE'] >= age_filter[0]) & (db['AGE'] <= age_filter[1])]
+            st.dataframe(filtered_df)
+    # filtered_df = db[(db['AGE'] >= age_filter[0]) & (db['AGE'] <= age_filter[1])]
+    # if gender_1:
+    #     filtred_df = filtred_df[(filtred_df['GENDER'] == 1)]
+    #     st.dataframe(filtered_gender)
+    # elif gender_0:
+    #     filtred_gender = filtred_df[(filtred_df['GENDER'] == 0)]
+    #     st.dataframe(filtered_gender)
+    # else:
+    #     st.dataframe(filtered_df)
 with tab2:
     st.write('Разведочный анализ')
 
