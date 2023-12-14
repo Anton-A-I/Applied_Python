@@ -46,11 +46,21 @@ tab1, tab2 = st.tabs(['Таблица', 'Разведочный анализ'])
 # selected_tab = st.selectbox('Выберите вкладку', tabs)
 with tab1:
 
-    gender_1 = st.checkbox('Мужчины')
-    gender_0 = st.checkbox('Женщины')
-    age_filter = st.slider('Фильтр по возрасту', 0, 100, (0, 100))
+    target_1 = st.checkbox('Откликнулись на предложение банка')
+    target_0 = st.checkbox('Отказались от предложения банка')
+    # age_filter = st.slider('Фильтр по возрасту', 0, 100, (0, 100))
 
-    if age_filter[0] == 0 and age_filter[1] == 100:
+    if target_1:  # Если пользователь выбрал только мужчин
+        filtered_df = db[filtered_df['TARGET'] == 1]
+        st.dataframe(filtered_df)
+    elif target_0:  # Если пользователь выбрал только женщин
+        filtered_df = db[filtered_df['TARGET'] == 0]
+        st.dataframe(filtered_df)
+    else:
+        filtered_df = db
+        st.dataframe(filtered_df)
+
+    # if age_filter[0] == 0 and age_filter[1] == 100:
         # if gender_1 and gender_0:  # Если пользователь выбрал оба значения пола
         #     filtered_df = db
         # elif gender_1:  # Если пользователь выбрал только мужчин
@@ -58,20 +68,20 @@ with tab1:
         # elif gender_0:  # Если пользователь выбрал только женщин
         #     filtered_df = db[db['GENDER'] == 0]
         # else:  # Если пользователь не выбрал значения пола
-        filtered_df = db
+        # filtered_df = db
 
-    else:  # Если пользователь выбрал фильтр по возрасту
-        filtered_df = db[(db['AGE'] >= age_filter[0]) & (db['AGE'] <= age_filter[1])]
-        st.dataframe(filtered_df)
-        if gender_1:  # Если пользователь выбрал только мужчин
-            filtered_df = filtered_df[filtered_df['GENDER'] == 1]
-            st.dataframe(filtered_df)
-        elif gender_0:  # Если пользователь выбрал только женщин
-            filtered_df = filtered_df[filtered_df['GENDER'] == 0]
-            st.dataframe(filtered_df)
-        else:
-            filtered_df = db[(db['AGE'] >= age_filter[0]) & (db['AGE'] <= age_filter[1])]
-            st.dataframe(filtered_df)
+    # else:  # Если пользователь выбрал фильтр по возрасту
+    #     filtered_df = db[(db['AGE'] >= age_filter[0]) & (db['AGE'] <= age_filter[1])]
+    #     st.dataframe(filtered_df)
+    #     if gender_1:  # Если пользователь выбрал только мужчин
+    #         filtered_df = filtered_df[filtered_df['GENDER'] == 1]
+    #         st.dataframe(filtered_df)
+    #     elif gender_0:  # Если пользователь выбрал только женщин
+    #         filtered_df = filtered_df[filtered_df['GENDER'] == 0]
+    #         st.dataframe(filtered_df)
+    #     else:
+    #         filtered_df = db[(db['AGE'] >= age_filter[0]) & (db['AGE'] <= age_filter[1])]
+    #         st.dataframe(filtered_df)
     # filtered_df = db[(db['AGE'] >= age_filter[0]) & (db['AGE'] <= age_filter[1])]
     # if gender_1:
     #     filtred_df = filtred_df[(filtred_df['GENDER'] == 1)]
