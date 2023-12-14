@@ -60,7 +60,7 @@ with tab1:
         filtred_df = db[db['TARGET'] == 0]
 
     else:
-        filtered_df = db
+        filtred_df = db
     st.dataframe(filtred_df)
 
     # if age_filter[0] == 0 and age_filter[1] == 100:
