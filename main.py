@@ -52,7 +52,7 @@ with tab1:
 
     if target_1 & target_0:
         filtered_df = db
-        st.dataframe(db)
+        st.dataframe(filtered_df)
     if target_1:  # Если пользователь выбрал только мужчин
         filtered_df = db[db['TARGET'] == 1]
         st.dataframe(filtered_df)
@@ -61,7 +61,7 @@ with tab1:
         st.dataframe(filtered_df)
     else:
         filtered_df = db
-        st.dataframe(db)
+        st.dataframe(filtred_df)
 
     # if age_filter[0] == 0 and age_filter[1] == 100:
         # if gender_1 and gender_0:  # Если пользователь выбрал оба значения пола
