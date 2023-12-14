@@ -49,7 +49,7 @@ with tab1:
     target_1 = st.checkbox('Откликнулись на предложение банка')
     target_0 = st.checkbox('Отказались от предложения банка')
     # age_filter = st.slider('Фильтр по возрасту', 0, 100, (0, 100))
-
+    filtered_df = db
     if target_1 & target_0:
         filtered_df = db
 
