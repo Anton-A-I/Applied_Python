@@ -154,7 +154,7 @@ with tab2:
 # fig_education.update_layout( title='Распределение людей по уровню образования')
 # st.plotly_chart(fig_education)
 
-    def get_education_data(gender_filter):
+    def get_education_data(target):
         q = '''
         SELECT EDUCATION as "Образование",
         COUNT(EDUCATION) as "Кол-во" 
@@ -162,9 +162,22 @@ with tab2:
         WHERE TARGET in ({})
         GROUP BY "Образование"
         ORDER BY "Кол-во" DESC 
-        '''.format(gender_filter )
+        '''.format(target )
         education_data = duckdb.query(q).to_df()
         return education_data
+
+
+    def get_age_data(target):
+        q1 = '''
+        SELECT AGE, COUNT(AGE) as COUNT,
+        FROM db
+        WHERE AGE in ({})
+        GROUP BY  AGE
+        ORDER BY AGE ASC
+        '''.format(terget)
+        age_tg = duckdb.query(q1).to_df()
+        return age_tg
+
 
     def plot_education_pie_chart(education_data):
         fig = go.Figure()
@@ -172,6 +185,12 @@ with tab2:
         fig.update_layout(title='Распределение людей по уровню образования')
         return fig
 
+    def plot_age_pie_chart(age_tg):
+        fig = go.Figure()
+        fig.add_trace(go.Bar(x=age_tg['AGE'], y=age_tg['COUNT'], text=age_tg['COUNT'], textposition='auto', textangle=0,  marker_color='#4361ee', name='Количество людей'))
+        fig.add_trace(go.Scatter(x=age_tg['AGE'], y=age_tg['COUNT'].groupby(age_tg['AGE']).max(), line_shape='spline', mode='lines', name='Тренд', marker_color='#f72585'))
+        fig.update_layout( title='Распределение людей по возрасту', xaxis_title='Возраст', yaxis_title='Количество людей')
+        return fig
 
     target_tab_1 = st.checkbox('Откликнулись на предложение')
     target_tab_0 = st.checkbox('Отказались от предложения')
@@ -183,7 +202,11 @@ with tab2:
     else:
         target = '0, 1'
 
+    age_data = get_age_data(target)
+    fig_age = plot_age_pie_chart(age_tg)
+
     education_data = get_education_data(target)
     fig_education = plot_education_pie_chart(education_data)
 
     st.plotly_chart(fig_education)
+    st.plotly_chart(fig_age)
