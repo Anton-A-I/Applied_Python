@@ -39,26 +39,20 @@ st.write('Это приложение позволяет провести раз
          'выявить зависимости между признаками клиента и его склонности к положительному или отрицательному отклику на предложение банка.')
 
 image = Image.open('img_1.png')
-st.image(image, caption='Пример картинки', use_column_width=True)
+st.image(image, use_column_width=True)
 
 tab1, tab2 = st.tabs(['Таблица', 'Разведочный анализ'])
 
-# selected_tab = st.selectbox('Выберите вкладку', tabs)
 with tab1:
 
     target_1 = st.checkbox('Откликнулись на предложение банка')
     target_0 = st.checkbox('Отказались от предложения банка')
-    # age_filter = st.slider('Фильтр по возрасту', 0, 100, (0, 100))
-
     if target_1 & target_0:
         filtred_df = db
-
     if target_1:  # Если пользователь выбрал только мужчин
         filtred_df = db[db['TARGET'] == 1]
-
     elif target_0:  # Если пользователь выбрал только женщин
         filtred_df = db[db['TARGET'] == 0]
-
     else:
         filtred_df = db
     st.dataframe(filtred_df)
@@ -165,7 +159,7 @@ with tab2:
         SELECT EDUCATION as "Образование",
         COUNT(EDUCATION) as "Кол-во" 
         FROM db
-        WHERE GENDER in ({})
+        WHERE TARGET in ({})
         GROUP BY "Образование"
         ORDER BY "Кол-во" DESC 
         '''.format(gender_filter )
@@ -178,16 +172,18 @@ with tab2:
         fig.update_layout(title='Распределение людей по уровню образования')
         return fig
 
-    selected_genders = st.selectbox('Выберите пол', ['Мужчины', 'Женщины', 'Все'])
 
-    if selected_genders == 'Мужчины':
-        gender_filter = 1
-    elif selected_genders == 'Женщины':
-        gender_filter = 0
+    target_1 = st.checkbox('Откликнулись на предложение банка')
+    target_0 = st.checkbox('Отказались от предложения банка')
+
+    if target_1:
+        target = 1
+    elif target_0:
+        target = 0
     else:
-        gender_filter = '0, 1'
+        target = '0, 1'
 
-    education_data = get_education_data(gender_filter)
+    education_data = get_education_data(target)
     fig_education = plot_education_pie_chart(education_data)
 
     st.plotly_chart(fig_education)
