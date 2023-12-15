@@ -159,12 +159,24 @@ with tab2:
 
 
     def plot_personal_income_chart(personal_income):
-        fig = px.histogram(personal_income[personal_income["Отклик на предложение банка"] == 1], x=personal_income["Доход"], opacity=0.5, nbins=20,
-                       # name='Положительный отклик',
-                       title='Распределение дохода для TARGET = 1',
-                       labels=personal_income["Кол-во"],
-                       histfunc='count',
-                       barmode='overlay')
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=personal_income[
+            personal_income["Отклик на предложение банка"] == 1]["Доход"],
+                                 mode='lines', fill='tozeroy',
+                                 marker_color='#4361ee',
+                                 name='Откликнулись на предложение банка',
+                                 opacity=0.1))
+        fig.add_trace(go.Scatter(x=personal_income[
+            personal_income["Отклик на предложение банка"] == 0]["Доход"],
+                                 mode='lines', fill='tozeroy',
+                                 marker_color='#f72585',
+                                 name='Отказались от предложения банка',
+                                 opacity=0.8))
+        fig.update_layout(xaxis=dict(range=[0, 100000]))
+
+        fig.update_layout(title='Распределение зарплаты',
+                          xaxis_title='Зарплата',
+                          yaxis_title='Количество клиентов')
 
         # fig.add_trace(
         #     go.Histogram(labels={'Доход': 'Доход', 'count': 'Количество клиентов'}, values=personal_income[personal_income["Отклик на предложение банка"] == 0]["Доход"], opacity=0.5, nbins=20
@@ -185,10 +197,7 @@ with tab2:
         # fig.add_vline(x=median_target_0, line_dash="dash", line_color="red",
         #               name="Медиана для Отрицательного отклика")
 
-        fig.update_layout(barmode='overlay',
-                          title='Распределение дохода по целевой переменной',
-                          xaxis_title='Доход',
-                          yaxis_title='Количество клиентов')
+
         return fig
 
 
