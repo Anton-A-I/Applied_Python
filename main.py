@@ -194,4 +194,4 @@ with tab2:
 
     st.plotly_chart(fig_education)
     st.plotly_chart(fig_age)
-    st.plotly_chart(fig_gender)
+    st.plotly_chart(fig)
