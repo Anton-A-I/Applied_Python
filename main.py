@@ -165,7 +165,7 @@ with tab2:
                                  marker_color='#4361ee',
                                  name='Откликнулись на предложение банка',
                                  opacity=0.1))
-        fig.add_trace(go.Scatter(x=db[db['TARGET'] == 1].groupby('PERSONAL_INCOME').size().reset_index(name='COUNT')['PERSONAL_INCOME'], y = db[db['TARGET'] == 1].groupby('PERSONAL_INCOME').size().reset_index(name='COUNT')['COUNT'],,
+        fig.add_trace(go.Scatter(x=db[db['TARGET'] == 1].groupby('PERSONAL_INCOME').size().reset_index(name='COUNT')['PERSONAL_INCOME'], y = db[db['TARGET'] == 1].groupby('PERSONAL_INCOME').size().reset_index(name='COUNT')['COUNT'],
                                  mode='lines', fill='tozeroy',
                                  marker_color='#f72585',
                                  name='Отказались от предложения банка',
