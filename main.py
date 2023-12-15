@@ -190,8 +190,8 @@ with tab2:
     fig_education = plot_education_pie_chart(education_data)
 
     gender_data = get_gender_data(target)
-    fig_education = plot_gender_pie_chart(gender_data)
+    fig_gender = plot_gender_pie_chart(gender_data)
 
     st.plotly_chart(fig_education)
     st.plotly_chart(fig_age)
-    st.plotly_chart(fig)
+    st.plotly_chart(fig_gender)
