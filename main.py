@@ -176,30 +176,21 @@ with tab2:
                           xaxis_title='Зарплата',
                           yaxis_title='Количество клиентов')
 
-        # fig.add_trace(
-        #     go.Histogram(labels={'Доход': 'Доход', 'count': 'Количество клиентов'}, values=personal_income[personal_income["Отклик на предложение банка"] == 0]["Доход"], opacity=0.5, nbins=20
-        #              # name='Отрицательный отклик'
-        #                  ))
-
-        # Добавление вертикальной линии для медианы в первом распределении
-        # median_target_1 = \
-        # personal_income[personal_income["Отклик на предложение банка"] == 1][
-        #     "Доход"].median()
-        # fig.add_vline(x=median_target_1, line_dash="dash", line_color="blue",
-        #               name="Медиана для Положительного отклика")
-
-        # Добавление вертикальной линии для медианы во втором распределении
-        # median_target_0 = \
-        # personal_income[personal_income["Отклик на предложение банка"] == 0][
-        #     "Доход"].median()
-        # fig.add_vline(x=median_target_0, line_dash="dash", line_color="red",
-        #               name="Медиана для Отрицательного отклика")
-
-
         return fig
 
 
-
+    X = db.drop(['SOCSTATUS_WORK_FL', 'SOCSTATUS_PENS_FL', 'EDUCATION',
+                 'MARITAL_STATUS', 'REG_ADDRESS_PROVINCE',
+                 'FACT_ADDRESS_PROVINCE', 'POSTAL_ADDRESS_PROVINCE',
+                 'FAMILY_INCOME', 'GEN_INDUSTRY', 'GEN_TITLE', 'JOB_DIR',
+                 'COMMENT', 'COMMENT_2', 'ID_CLIENT', 'ID_CLIENT_2',
+                 'ID_CLIENT_3', 'ID_LOAN_2', 'ID_CLIENT_4', 'ID_2', 'ID_3',
+                 'FLAG_2'], axis=1)
+    corr = X.corr()
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(corr, annot=True, cmap='coolwarm', linewidths=.5)
+    # plt.show()
+    st.pyplot()
 
     target_tab_1 = st.checkbox('Откликнулись на предложение')
     target_tab_0 = st.checkbox('Отказались от предложения')
