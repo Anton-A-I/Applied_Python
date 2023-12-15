@@ -8,6 +8,8 @@ import plotly.graph_objects as go
 import plotly as plt
 from PIL import Image
 import matplotlib.pyplot as plt
+import numpy as np
+from scipy.stats import norm
 
 D_clients = duckdb.read_csv('datasets/D_clients.csv')
 D_job = duckdb.read_csv('datasets/D_job.csv')
