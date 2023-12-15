@@ -167,9 +167,9 @@ with tab2:
         return fig
 
     def plot_gender_pie_chart(gender_tg):
-        fig_gender = go.Figure()
-        fig_gender.add_trace(go.Pie(labels = gender_tg['Пол'], values = gender_tg['Кол-во'], marker_colors=['#f72585', '#4361ee']))
-        fig_gender.update_layout( title='Распределение людей по полу')
+        fig = go.Figure()
+        fig.add_trace(go.Pie(labels = gender_tg['Пол'], values = gender_tg['Кол-во'], marker_colors=['#f72585', '#4361ee']))
+        fig.update_layout( title='Распределение людей по полу')
         return fig
 
 
