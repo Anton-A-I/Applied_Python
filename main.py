@@ -160,14 +160,12 @@ with tab2:
 
     def plot_personal_income_chart(personal_income):
         fig = go.Figure()
-        fig.add_trace(go.Scatter(x=personal_income[
-            personal_income["Отклик на предложение банка"] == 1]["Доход"],
+        fig.add_trace(go.Scatter(x=db[db['TARGET'] == 1].groupby('PERSONAL_INCOME').size().reset_index(name='COUNT')['PERSONAL_INCOME'], y = db[db['TARGET'] == 1].groupby('PERSONAL_INCOME').size().reset_index(name='COUNT')['COUNT'],
                                  mode='lines', fill='tozeroy',
                                  marker_color='#4361ee',
                                  name='Откликнулись на предложение банка',
                                  opacity=0.1))
-        fig.add_trace(go.Scatter(x=personal_income[
-            personal_income["Отклик на предложение банка"] == 0]["Доход"],
+        fig.add_trace(go.Scatter(x=db[db['TARGET'] == 1].groupby('PERSONAL_INCOME').size().reset_index(name='COUNT')['PERSONAL_INCOME'], y = db[db['TARGET'] == 1].groupby('PERSONAL_INCOME').size().reset_index(name='COUNT')['COUNT'],,
                                  mode='lines', fill='tozeroy',
                                  marker_color='#f72585',
                                  name='Отказались от предложения банка',
