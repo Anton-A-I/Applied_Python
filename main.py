@@ -190,8 +190,8 @@ with tab2:
                  'ID_CLIENT_3', 'ID_LOAN_2', 'ID_CLIENT_4', 'ID_2', 'ID_3',
                  'FLAG_2'], axis=1)
     corr = X.corr()
-    plt.figure(figsize=(10, 8))
-    sns.heatmap(corr, annot=True, cmap='coolwarm', linewidths=.5)
+    plt.figure(figsize=(15, 11))
+    sns.heatmap(corr,fmt='.2f', annot=True, cmap='PuRd', linewidths=.5)
     # plt.show()
     st.pyplot()
 
