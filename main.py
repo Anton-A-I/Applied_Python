@@ -166,10 +166,10 @@ with tab2:
                        histfunc='count',
                        barmode='overlay')
 
-        # fig.add_trace(
-        #     go.histogram(x=personal_income[personal_income["Отклик на предложение банка"] == 0]["Доход"], opacity=0.5, nbins=20,
-        #              # name='Отрицательный отклик'
-        #                  ))
+        fig.add_trace(
+            go.Histogram(values=personal_income[personal_income["Отклик на предложение банка"] == 0]["Доход"], opacity=0.5, nbins=20, marker_colors='#f72585'
+                     # name='Отрицательный отклик'
+                         ))
 
         # Добавление вертикальной линии для медианы в первом распределении
         # median_target_1 = \
