@@ -174,7 +174,7 @@ with tab2:
         WHERE AGE in ({})
         GROUP BY  AGE
         ORDER BY AGE ASC
-        '''.format(terget)
+        '''.format(target)
         age_tg = duckdb.query(q1).to_df()
         return age_tg
 
