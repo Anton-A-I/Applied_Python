@@ -191,7 +191,7 @@ with tab2:
                  'FLAG_2'], axis=1)
     corr = X.corr()
     plt.figure(figsize=(15, 11))
-    sns.heatmap(corr,fmt='.2f', annot=True, cmap='PuRd', linewidths=.5)
+    sns.heatmap(corr,fmt='.3f', annot=True, cmap='PuRd', linewidths=.5)
     # plt.show()
     st.pyplot()
 
