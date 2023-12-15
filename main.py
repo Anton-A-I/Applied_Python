@@ -171,7 +171,7 @@ with tab2:
         q1 = '''
         SELECT AGE, COUNT(AGE) as COUNT,
         FROM db
-        WHERE AGE in ({})
+        WHERE TARGET in ({})
         GROUP BY  AGE
         ORDER BY AGE ASC
         '''.format(target)
