@@ -159,7 +159,7 @@ with tab2:
 
 
     def plot_personal_income_chart(personal_income):
-        fig = px.histogram(personal_income[personal_income["Отклик на предложение банка"] == 1], x="Доход", opacity=0.5, nbins=20,
+        fig = px.histogram(personal_income[personal_income["Отклик на предложение банка"] == 1], x=personal_income["Доход"], opacity=0.5, nbins=20,
                        name='Положительный отклик',
                        title='Распределение дохода для TARGET = 1',
                        labels={'Доход': 'Доход', 'count': 'Количество клиентов'},
