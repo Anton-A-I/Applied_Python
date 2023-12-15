@@ -91,46 +91,6 @@ with tab1:
 with tab2:
     st.write('Разведочный анализ')
 
-
-# gender_mapping = {0: 'Женщина', 1: 'Мужчина'}
-# db['GENDER'] = db['GENDER'].map(gender_mapping)
-
-
-
-# q1 = '''
-# SELECT AGE, COUNT(AGE) as COUNT,
-# FROM db
-# GROUP BY  AGE
-# ORDER BY AGE ASC
-# '''
-#
-# age_tg = duckdb.query(q1).to_df()
-#
-# fig = go.Figure()
-# fig.add_trace(go.Bar(x=age_tg['AGE'], y=age_tg['COUNT'], text=age_tg['COUNT'], textposition='auto', textangle=0,  marker_color='#4361ee', name='Количество людей'))
-# fig.add_trace(go.Scatter(x=age_tg['AGE'], y=age_tg['COUNT'].groupby(age_tg['AGE']).max(), line_shape='spline', mode='lines', name='Тренд', marker_color='#f72585'))
-# fig.update_layout( title='Распределение людей по возрасту', xaxis_title='Возраст', yaxis_title='Количество людей')
-# fig.show()
-#
-# q2 = '''
-# SELECT CASE
-#     WHEN GENDER = 1 THEN 'Мужчины'
-#     WHEN  GENDER = 0 THEN 'Женщины'
-# END as "Пол",
-# COUNT(GENDER) as "Кол-во"
-# FROM db
-# GROUP BY  GENDER
-# ORDER BY GENDER ASC
-# '''
-#
-# gender = duckdb.query(q2).to_df()
-#
-# fig_gender = go.Figure()
-# fig_gender.add_trace(go.Pie(labels = gender['Пол'], values = gender['Кол-во'], marker_colors=['#f72585', '#4361ee']))
-# fig_gender.update_layout( title='Распределение людей по полу')
-# fig_gender.show()
-# selected_genders = st.selectbox('Выберите пол', ['Мужчины', 'Женщины', 'Все'])
-#
 # if selected_genders == 'Мужчины':
 #     gender_filter = 1
 # elif selected_genders == 'Женщины':
@@ -178,6 +138,20 @@ with tab2:
         age_tg = duckdb.query(q1).to_df()
         return age_tg
 
+    def get_gender_data(target):
+        q2 = '''
+        SELECT CASE
+            WHEN GENDER = 1 THEN 'Мужчины'
+            WHEN  GENDER = 0 THEN 'Женщины'
+        END as "Пол",
+        COUNT(GENDER) as "Кол-во"
+        FROM db
+        WHERE TARGET in ({})
+        GROUP BY  GENDER
+        ORDER BY GENDER ASC
+        '''.format(target)
+        gender_tg = duckdb.query(q2).to_df()
+        return gender_tg
 
     def plot_education_pie_chart(education_data):
         fig = go.Figure()
@@ -191,6 +165,13 @@ with tab2:
         fig.add_trace(go.Scatter(x=age_tg['AGE'], y=age_tg['COUNT'].groupby(age_tg['AGE']).max(), line_shape='spline', mode='lines', name='Тренд', marker_color='#f72585'))
         fig.update_layout( title='Распределение людей по возрасту', xaxis_title='Возраст', yaxis_title='Количество людей')
         return fig
+
+    def plot_gender_pie_chart(gender_tg):
+        fig_gender = go.Figure()
+        fig_gender.add_trace(go.Pie(labels = gender_tg['Пол'], values = gender_tg['Кол-во'], marker_colors=['#f72585', '#4361ee']))
+        fig_gender.update_layout( title='Распределение людей по полу')
+        return fig
+
 
     target_tab_1 = st.checkbox('Откликнулись на предложение')
     target_tab_0 = st.checkbox('Отказались от предложения')
@@ -208,5 +189,9 @@ with tab2:
     education_data = get_education_data(target)
     fig_education = plot_education_pie_chart(education_data)
 
+    gender_data = get_gender_data(target)
+    fig_education = plot_gender_pie_chart(gender_data)
+
     st.plotly_chart(fig_education)
     st.plotly_chart(fig_age)
+    st.plotly_chart(fig_gender)
