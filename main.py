@@ -132,7 +132,7 @@ with tab2:
 
     def get_personal_income_target():
         q = '''
-                SELECT TARGET AS "Отклик на предложение банка", PERSONAL_INCOME AS "Доход", count(PERSONAL_INCOME) as "Кол-во"
+                SELECT TARGET AS "Отклик на предложение банка", PERSONAL_INCOME AS "Доход"
                 FROM db
                 '''
         personal_income = duckdb.query(q).to_df()
