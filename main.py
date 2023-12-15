@@ -179,6 +179,40 @@ with tab2:
 
         return fig
 
+    def child_chart():
+        fig, ax = plt.subplots(1, 2, figsize=(14, 9))
+
+        sns.histplot(db[db['TARGET'] == 1]['CHILD_TOTAL'], kde=True,
+                     stat="density", color='#4361ee', ax=ax[0])
+        mu, std = db[db['TARGET'] == 1]['CHILD_TOTAL'].mean(), \
+        db[db['TARGET'] == 1]['CHILD_TOTAL'].std()
+        xmin, xmax = plt.xlim()
+        sz = db[db['TARGET'] == 1]['CHILD_TOTAL'].size
+        x = np.linspace(xmin, xmax, sz)
+        p = norm.pdf(x, mu, std)
+        ax[0].plot(x, p, 'k', linewidth=2)
+        ax[0].set_title(
+            'Распределение количества детей у клиентов, которые воспользовались предложением Банка')
+        ax[0].set_xlabel('Количество детей')
+        ax[0].set_ylabel('Плотность')
+        ax[0].set_ylim(0, 0.5)
+
+        sns.histplot(db[db['TARGET'] == 0]['CHILD_TOTAL'], kde=True,
+                     stat="density", color='#4361ee', ax=ax[1])
+        mu, std = db[db['TARGET'] == 0]['CHILD_TOTAL'].mean(), \
+        db[db['TARGET'] == 0]['CHILD_TOTAL'].std()
+        xmin, xmax = plt.xlim()
+        sz = db[db['TARGET'] == 0]['CHILD_TOTAL'].size
+        x = np.linspace(xmin, xmax, sz)
+        p = norm.pdf(x, mu, std)
+        ax[1].plot(x, p, 'k', linewidth=2)
+        ax[1].set_title(
+            'Распределение количества детей у клиентов, которые отказались от предложения Банка')
+        ax[1].set_xlabel('Количество детей')
+        ax[1].set_ylabel('Плотность')
+        ax[1].set_ylim(0, 0.5)
+
+        return fig
 
     st.set_option('deprecation.showPyplotGlobalUse', False)
 
@@ -217,10 +251,13 @@ with tab2:
     personal_income = get_personal_income_target()
     fig_personal_income = plot_personal_income_chart(personal_income)
 
-    pair = sns.pairplot(X, height=7)
+    child_total = child_chart()
+
+    # pair = sns.pairplot(X, height=7)
 
     st.plotly_chart(fig_education)
     st.plotly_chart(fig_age)
     st.plotly_chart(fig_gender)
     st.plotly_chart(fig_personal_income)
     st.pyplot(pair)
+    st.pyplot(child_total)
