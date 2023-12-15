@@ -132,7 +132,7 @@ with tab2:
 
     def get_personal_income_target():
         q = '''
-                SELECT TARGET AS "Отклик на предложение банка", PERSONAL_INCOME AS "Доход"
+                SELECT TARGET AS "Отклик на предложение банка", PERSONAL_INCOME AS "Доход", count(PERSONAL_INCOME) as "Кол-во"
                 FROM db
                 '''
         personal_income = duckdb.query(q).to_df()
@@ -162,7 +162,7 @@ with tab2:
         fig = px.histogram(personal_income[personal_income["Отклик на предложение банка"] == 1], x=personal_income["Доход"], opacity=0.5, nbins=20,
                        # name='Положительный отклик',
                        title='Распределение дохода для TARGET = 1',
-                       labels={'Доход': 'Доход', 'count': 'Количество клиентов'},
+                       labels=personal_income["Кол-во"],
                        histfunc='count',
                        barmode='overlay')
 
