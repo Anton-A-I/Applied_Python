@@ -164,12 +164,12 @@ with tab2:
                                  mode='lines', fill='tozeroy',
                                  marker_color='#4361ee',
                                  name='Откликнулись на предложение банка',
-                                 opacity=0.1))
+                                 opacity=0.8))
         fig.add_trace(go.Scatter(x=db[db['TARGET'] == 0].groupby('PERSONAL_INCOME').size().reset_index(name='COUNT')['PERSONAL_INCOME'], y = db[db['TARGET'] == 0].groupby('PERSONAL_INCOME').size().reset_index(name='COUNT')['COUNT'],
                                  mode='lines', fill='tozeroy',
                                  marker_color='#f72585',
                                  name='Отказались от предложения банка',
-                                 opacity=0.8))
+                                 opacity=0.3))
         fig.update_layout(xaxis=dict(range=[0, 100000]))
 
         fig.update_layout(title='Распределение зарплаты',
