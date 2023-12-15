@@ -203,7 +203,7 @@ with tab2:
         target = '0, 1'
 
     age_data = get_age_data(target)
-    fig_age = plot_age_pie_chart(age_tg)
+    fig_age = plot_age_pie_chart(age_data)
 
     education_data = get_education_data(target)
     fig_education = plot_education_pie_chart(education_data)
