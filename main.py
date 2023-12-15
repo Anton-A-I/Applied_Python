@@ -223,4 +223,4 @@ with tab2:
     st.plotly_chart(fig_age)
     st.plotly_chart(fig_gender)
     st.plotly_chart(fig_personal_income)
-    st.plotly_chart(pair)
+    st.pyplot(pair)
