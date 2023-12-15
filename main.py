@@ -173,12 +173,12 @@ with tab2:
         return fig
 
 
-    target_1 = st.checkbox('Откликнулись на предложение банка')
-    target_0 = st.checkbox('Отказались от предложения банка')
+    target_tab_1 = st.checkbox('Откликнулись на предложение банка')
+    target_tab_0 = st.checkbox('Отказались от предложения банка')
 
-    if target_1:
+    if target_tab_1:
         target = 1
-    elif target_0:
+    elif target_tab_0:
         target = 0
     else:
         target = '0, 1'
