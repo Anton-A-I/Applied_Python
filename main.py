@@ -217,7 +217,7 @@ with tab2:
     personal_income = get_personal_income_target()
     fig_personal_income = plot_personal_income_chart(personal_income)
 
-    pair = sns.pairplot(X)
+    pair = sns.pairplot(X, height=4)
 
     st.plotly_chart(fig_education)
     st.plotly_chart(fig_age)
