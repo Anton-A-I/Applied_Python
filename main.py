@@ -91,29 +91,6 @@ with tab1:
 with tab2:
     st.write('Разведочный анализ')
 
-# if selected_genders == 'Мужчины':
-#     gender_filter = 1
-# elif selected_genders == 'Женщины':
-#     gender_filter = 0
-# else:
-#     gender_filter = '1,0'
-# # age_filter = st.slider('Фильтр по возрасту', 0, 100, (0, 100))
-# q3 = '''
-# SELECT EDUCATION as "Образование",
-# COUNT(EDUCATION) as "Кол-во"
-# FROM db
-# WHERE GENDER in ({})
-# GROUP BY  "Образование"
-# ORDER BY "Кол-во" DESC
-# '''.format(gender_filter if gender_filter in [0, 1] else '0, 1')
-#
-# education_data = duckdb.query(q3).to_df()
-#
-# fig_education = go.Figure()
-# fig_education.add_trace(go.Pie(labels=education_data['Образование'], values=education_data['Кол-во'], marker_colors=['#f72585', '#7209b7', '#3a0ca3', '#4361ee', '#4cc9f0', '#560badff']))
-# fig_education.update_layout( title='Распределение людей по уровню образования')
-# st.plotly_chart(fig_education)
-
     def get_education_data(target):
         q = '''
         SELECT EDUCATION as "Образование",
@@ -153,6 +130,14 @@ with tab2:
         gender_tg = duckdb.query(q2).to_df()
         return gender_tg
 
+    def get_personal_income_target():
+        q = '''
+                SELECT TARGET AS "Отклик на предложение банка", PERSONAL_INCOME AS "Доход"
+                FROM db
+                '''
+        personal_income = duckdb.query(q).to_df()
+        return personal_income
+
     def plot_education_pie_chart(education_data):
         fig = go.Figure()
         fig.add_trace(go.Pie(labels=education_data['Образование'], values=education_data['Кол-во'], marker_colors=['#f72585', '#7209b7', '#3a0ca3', '#4361ee', '#4cc9f0', '#560badff']))
@@ -171,6 +156,41 @@ with tab2:
         fig.add_trace(go.Pie(labels = gender_tg['Пол'], values = gender_tg['Кол-во'], marker_colors=['#f72585', '#4361ee']))
         fig.update_layout( title='Распределение людей по полу')
         return fig
+
+
+    def plot_personal_income_chart(personal_income):
+        fig = px.histogram(personal_income[personal_income["Отклик на предложение банка"] == 1], x=personal_income["Доход"], opacity=0.5, nbins=20,
+                       name='Положительный отклик',
+                       title='Распределение дохода для TARGET = 1',
+                       labels={'Доход': 'Доход', 'count': 'Количество клиентов'},
+                       histfunc='count',
+                       barmode='overlay')
+
+        fig.add_trace(
+            go.Histogram(personal_income[personal_income["Отклик на предложение банка"] == 0], x=personal_income["Доход"], opacity=0.5, nbins=20,
+                       name='Отрицательный отклик'))
+
+        # Добавление вертикальной линии для медианы в первом распределении
+        median_target_1 = \
+        personal_income[personal_income["Отклик на предложение банка"] == 1][
+            "Доход"].median()
+        fig.add_vline(x=median_target_1, line_dash="dash", line_color="blue",
+                      name="Медиана для Положительного отклика")
+
+        # Добавление вертикальной линии для медианы во втором распределении
+        median_target_0 = \
+        personal_income[personal_income["Отклик на предложение банка"] == 0][
+            "Доход"].median()
+        fig.add_vline(x=median_target_0, line_dash="dash", line_color="red",
+                      name="Медиана для Отрицательного отклика")
+
+        fig.update_layout(barmode='overlay',
+                          title='Распределение дохода по целевой переменной',
+                          xaxis_title='Доход',
+                          yaxis_title='Количество клиентов')
+        return fig
+
+
 
 
     target_tab_1 = st.checkbox('Откликнулись на предложение')
@@ -192,6 +212,10 @@ with tab2:
     gender_data = get_gender_data(target)
     fig_gender = plot_gender_pie_chart(gender_data)
 
+    personal_income = get_personal_income_target()
+    fig_personal_income = plot_personal_income_chart(personal_income)
+
     st.plotly_chart(fig_education)
     st.plotly_chart(fig_age)
     st.plotly_chart(fig_gender)
+    st.plotly_chart(fig_personal_income)
