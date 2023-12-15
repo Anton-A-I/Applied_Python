@@ -7,6 +7,7 @@ import streamlit as st
 import plotly.graph_objects as go
 import plotly as plt
 from PIL import Image
+import matplotlib.pyplot as plt
 
 D_clients = duckdb.read_csv('datasets/D_clients.csv')
 D_job = duckdb.read_csv('datasets/D_job.csv')
