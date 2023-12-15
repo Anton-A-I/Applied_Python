@@ -167,7 +167,7 @@ with tab2:
                        barmode='overlay')
 
         fig.add_trace(
-            go.Histogram(values=personal_income[personal_income["Отклик на предложение банка"] == 0]["Доход"], opacity=0.5, nbins=20, marker='#f72585'
+            go.Histogram(labels={'Доход': 'Доход', 'count': 'Количество клиентов'}, values=personal_income[personal_income["Отклик на предложение банка"] == 0]["Доход"], opacity=0.5, nbins=20
                      # name='Отрицательный отклик'
                          ))
 
