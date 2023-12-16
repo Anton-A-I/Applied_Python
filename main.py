@@ -280,3 +280,4 @@ with tab2:
     st.pyplot(child_chart(1))
     st.pyplot(child_chart(0))
     st.pyplot(corr_feature(X))
+    st.dataframe(db.describe())
