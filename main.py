@@ -207,7 +207,7 @@ with tab2:
         xmin, xmax = plt.xlim()
         sz = db[db['TARGET'] == 0]['CHILD_TOTAL'].size
         x = np.linspace(xmin, xmax, sz)
-        p = norm.pdf(x, mu, std)
+        p = sp.stats.norm.pdf(x, mu, std)
         ax[1].plot(x, p, 'k', linewidth=2)
         ax[1].set_title(
             'Распределение количества детей у клиентов, которые отказались от предложения Банка')
