@@ -247,7 +247,7 @@ with tab2:
     numerical_signs = db.drop(['EDUCATION',
                  'MARITAL_STATUS', 'REG_ADDRESS_PROVINCE',
                  'FACT_ADDRESS_PROVINCE', 'POSTAL_ADDRESS_PROVINCE',
-                 'GEN_INDUSTRY', 'GEN_TITLE', 'JOB_DIR', 'FAMILY_INCOME', 'AGREEMENT_RK'], axis=1)
+                 'GEN_INDUSTRY', 'GEN_TITLE', 'JOB_DIR', 'FAMILY_INCOME', 'AGREEMENT_RK', 'ID'], axis=1)
 
 
 
