@@ -213,7 +213,7 @@ with tab2:
                 f'Распределение количества детей у клиентов, \n которые отказались от предложения Банка')
         plt.xlabel('Количество детей')
         plt.ylabel('Плотность')
-        plt.ylim(0, 0.5)
+        # plt.ylim(0, 0.5)
 
         # sns.histplot(db[db['TARGET'] == 0]['CHILD_TOTAL'], kde=True,
         #              stat="density", color='#4361ee', ax=ax[1])
