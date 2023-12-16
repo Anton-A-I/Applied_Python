@@ -252,50 +252,95 @@ with tab3:
     import streamlit as st
     import pandas as pd
 
-    # Создание набора полей для ввода значений
-    age = st.number_input("Возраст", min_value=18, max_value=100, value=30)
-    socstatus_work = st.radio("Трудоустроен", ['Да', 'Нет'])
-    socstatus_work_numeric = 1 if socstatus_work == 'Да' else 0
-    socstatus_pens = st.radio("Пенсионер", ['Да', 'Нет'])
-    socstatus_pens_numeric = 1 if socstatus_pens == 'Да' else 0
-    gender = st.selectbox("Пол", db.GENDER.unique())
-    child_total = st.number_input("Количество детей", min_value=0,
-                                  max_value=15, value=0)
-    dependants = st.number_input("Количество иждивенцев", min_value=0,
-                                 max_value=15, value=0)
-    personal_income = st.number_input("Личный доход", min_value=0, value=50000)
-    loan_num_total = st.number_input("Общее количество кредитов", min_value=0,
-                                     value=1)
-    loan_num_closed = st.number_input("Количество закрытых кредитов",
-                                      min_value=0, value=0)
-    education = st.selectbox("Образование", db.EDUCATION.unique())
-    gen_title = st.selectbox("Должность", db.GEN_TITLE.unique())
-    family_income = st.number_input("Семейный доход", min_value=0, value=50000)
+    # Получение состояния
+    input_state = st.experimental_get_query_params()
+    if not input_state:
+        input_state = {
+            'AGE': 30,
+            'SOCSTATUS_WORK_FL': 1,
+            'SOCSTATUS_PENS_FL': 0,
+            'GENDER': 0,
+            'CHILD_TOTAL': 0,
+            'DEPENDANTS': 0,
+            'PERSONAL_INCOME': 50000,
+            'LOAN_NUM_TOTAL': 1,
+            'LOAN_NUM_CLOSED': 0,
+            'EDUCATION': db.EDUCATION.unique()[0],
+            'GEN_TITLE': db.GEN_TITLE.unique()[0],
+            'FAMILY_INCOME': 50000
+        }
 
-    # Создание словаря с введенными значениями
-    input_data = {
-        'AGE': age,
-        'SOCSTATUS_WORK_FL': 1 if socstatus_work == 'Да' else 0,
-        'SOCSTATUS_PENS_FL': 1 if socstatus_pens == 'Да' else 0,
-        'GENDER': 1 if gender == 'Мужской' else 0,
-        'CHILD_TOTAL': child_total,
-        'DEPENDANTS': dependants,
-        'PERSONAL_INCOME': personal_income,
-        'LOAN_NUM_TOTAL': loan_num_total,
-        'LOAN_NUM_CLOSED': loan_num_closed,
-        'EDUCATION': education,
-        'GEN_TITLE': gen_title,
-        'FAMILY_INCOME': family_income
-    }
+    # # Создание набора полей для ввода значений
+    # age = st.number_input("Возраст", min_value=18, max_value=100, value=30)
+    # socstatus_work = st.radio("Трудоустроен", ['Да', 'Нет'])
+    # socstatus_pens = st.radio("Пенсионер", ['Да', 'Нет'])
+    # gender = st.selectbox("Пол", db.GENDER.unique())
+    # child_total = st.number_input("Количество детей", min_value=0,
+    #                               max_value=15, value=0)
+    # dependants = st.number_input("Количество иждивенцев", min_value=0,
+    #                              max_value=15, value=0)
+    # personal_income = st.number_input("Личный доход", min_value=0, value=50000)
+    # loan_num_total = st.number_input("Общее количество кредитов", min_value=0,
+    #                                  value=1)
+    # loan_num_closed = st.number_input("Количество закрытых кредитов",
+    #                                   min_value=0, value=0)
+    # education = st.selectbox("Образование", db.EDUCATION.unique())
+    # gen_title = st.selectbox("Должность", db.GEN_TITLE.unique())
+    # family_income = st.number_input("Семейный доход", min_value=0, value=50000)
+
+    # Создание набора полей для ввода значений
+    age = st.number_input("Возраст", min_value=18, max_value=100,
+                          value=input_state['AGE'])
+    socstatus_work = st.radio("Трудоустроен", ['Да', 'Нет'],
+                              index=0 if input_state[
+                                             'SOCSTATUS_WORK_FL'] == 1 else 1)
+    socstatus_pens = st.radio("Пенсионер", ['Да', 'Нет'],
+                              index=0 if input_state[
+                                             'SOCSTATUS_PENS_FL'] == 1 else 1)
+    gender = st.selectbox("Пол", db.GENDER.unique(),
+                          index=input_state['GENDER'])
+    child_total = st.number_input("Количество детей", min_value=0,
+                                  max_value=15,
+                                  value=input_state['CHILD_TOTAL'])
+    dependants = st.number_input("Количество иждивенцев", min_value=0,
+                                 max_value=15, value=input_state['DEPENDANTS'])
+    personal_income = st.number_input("Личный доход", min_value=0,
+                                      value=input_state['PERSONAL_INCOME'])
+    loan_num_total = st.number_input("Общее количество кредитов", min_value=0,
+                                     value=input_state['LOAN_NUM_TOTAL'])
+    loan_num_closed = st.number_input("Количество закрытых кредитов",
+                                      min_value=0,
+                                      value=input_state['LOAN_NUM_CLOSED'])
+    education = st.selectbox("Образование", db.EDUCATION.unique(), index=0)
+    gen_title = st.selectbox("Должность", db.GEN_TITLE.unique(), index=0)
+    family_income = st.number_input("Семейный доход", min_value=0,
+                                    value=input_state['FAMILY_INCOME'])
+
+    # Обновление состояния
+    input_state['AGE'] = age
+    input_state['SOCSTATUS_WORK_FL'] = 1 if socstatus_work == 'Да' else 0
+    input_state['SOCSTATUS_PENS_FL'] = 1 if socstatus_pens == 'Да' else 0
+    input_state['GENDER'] = 1 if gender == 'Мужской' else 0
+    input_state['CHILD_TOTAL'] = child_total
+    input_state['DEPENDANTS'] = dependants
+    input_state['PERSONAL_INCOME'] = personal_income
+    input_state['LOAN_NUM_TOTAL'] = loan_num_total
+    input_state['LOAN_NUM_CLOSED'] = loan_num_closed
+    input_state['EDUCATION'] = education
+    input_state['GEN_TITLE'] = gen_title
+    input_state['FAMILY_INCOME'] = family_income
+
+    # Сохранение состояния
+    st.experimental_set_query_params(**input_state)
 
     # Создание датафрейма из введенных значений
     input_df = pd.DataFrame([input_data])
 
 
-    def forecast(input_df):
+    def forecast(input_df, db):
         # Создание экземпляра SimpleImputer с стратегией замены отсутствующих значений на среднее
         imputer = SimpleImputer(strategy='most_frequent')
-        db = db[['AGREEMENT_RK', 'TARGET', 'AGE', 'SOCSTATUS_WORK_FL',
+        db = db[['TARGET', 'AGE', 'SOCSTATUS_WORK_FL',
                  'SOCSTATUS_PENS_FL', 'GENDER', 'CHILD_TOTAL', 'DEPENDANTS',
                  'PERSONAL_INCOME', 'LOAN_NUM_TOTAL', 'LOAN_NUM_CLOSED',
                  'EDUCATION', 'GEN_TITLE', 'FAMILY_INCOME']]
@@ -342,4 +387,4 @@ with tab3:
 
     if st.button('Предсказать'):
         # Вызов функции для предсказания значения целевой переменной
-        forecast(input_df)
+        forecast(input_df, db)
