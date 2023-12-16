@@ -46,7 +46,9 @@ JOIN D_job ON D_clients.ID = D_job.ID_CLIENT) as t1
 GROUP BY ID, CLOSED_FL) as t2
 ON D_clients.ID = t2.ID
 '''
-db = duckdb.query(q).to_df()
+db = duckdb.query(q).to_df().drop(['ID_CLIENT', 'ID_CLIENT_2',
+                 'ID_CLIENT_3', 'ID_LOAN_2', 'ID_CLIENT_4', 'ID_2',
+                 'CLOSED_FL_2', 'FAMILY_INCOME', 'AGREEMENT_RK', 'ID_LOAN'], axis=1)
 
 st.title('Анализ клиентов банка')
 st.write('Это приложение позволяет провести разведочный анализ данных, софрмировать портрет клиентов, '
@@ -197,10 +199,7 @@ with tab2:
     numerical_signs = db.drop(['SOCSTATUS_WORK_FL', 'SOCSTATUS_PENS_FL', 'EDUCATION',
                  'MARITAL_STATUS', 'REG_ADDRESS_PROVINCE',
                  'FACT_ADDRESS_PROVINCE', 'POSTAL_ADDRESS_PROVINCE',
-                 'FAMILY_INCOME', 'GEN_INDUSTRY', 'GEN_TITLE', 'JOB_DIR',
-                 'ID_CLIENT', 'ID_CLIENT_2',
-                 'ID_CLIENT_3', 'ID_LOAN_2', 'ID_CLIENT_4', 'ID_2',
-                 'CLOSED_FL_2', 'AGREEMENT_RK', 'ID_LOAN'], axis=1)
+                 'GEN_INDUSTRY', 'GEN_TITLE', 'JOB_DIR'], axis=1)
 
 
 
