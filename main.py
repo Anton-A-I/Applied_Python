@@ -178,12 +178,29 @@ with tab2:
                                  mode='lines', fill='tozeroy',
                                  marker_color='#4361ee',
                                  name='Откликнулись на предложение банка',
-                                 opacity=0.8))
+                                 opacity=0.5, showlegend=False ))
         fig.add_trace(go.Scatter(x=db[db['TARGET'] == 0].groupby('PERSONAL_INCOME').size().reset_index(name='COUNT')['PERSONAL_INCOME'], y = db[db['TARGET'] == 0].groupby('PERSONAL_INCOME').size().reset_index(name='COUNT')['COUNT'],
                                  mode='lines', fill='tozeroy',
                                  marker_color='#f72585',
                                  name='Отказались от предложения банка',
-                                 opacity=0.3))
+                                 opacity=0.5, showlegend=False ))
+        fig.add_trace(go.Scatter(
+            x=[],
+            y=[],
+            mode='lines',
+            fill='tozeroy',
+            marker_color='#ffffff',
+            name='Легенда',
+            showlegend=True
+        ))
+
+        fig.update_layout(legend=dict(
+            orientation="h",  # Ориентация легенды (горизонтальная)
+            yanchor="bottom",  # Якорная точка по оси Y (снизу)
+            y=1.02,  # Положение легенды по оси Y
+            xanchor="ctnter",  # Якорная точка по оси X (справа)
+            x=1  # Положение легенды по оси X
+        ))
         fig.update_layout(xaxis=dict(range=[0, 100000]))
 
         fig.update_layout(title='Распределение зарплаты',
@@ -192,40 +209,44 @@ with tab2:
 
         return fig
 
-    def child_chart():
-        fig, ax = plt.subplots(1, 2, figsize=(14, 9))
-
-        sns.histplot(db[db['TARGET'] == 1]['CHILD_TOTAL'], kde=True,
-                     stat="density", color='#4361ee', ax=ax[0])
-        mu, std = db[db['TARGET'] == 1]['CHILD_TOTAL'].mean(), \
-        db[db['TARGET'] == 1]['CHILD_TOTAL'].std()
+    def child_chart(target):
+        # fig, ax = plt.subplots(1, 2, figsize=(14, 9))
+        plt.figure(figsize=(14, 9))
+        sns.histplot(db[db['TARGET'] == target]['CHILD_TOTAL'], kde=True,
+                     stat="density", color='#4361ee')
+        mu, std = db[db['TARGET'] == target]['CHILD_TOTAL'].mean(), \
+        db[db['TARGET'] == target]['CHILD_TOTAL'].std()
         xmin, xmax = plt.xlim()
-        sz = db[db['TARGET'] == 1]['CHILD_TOTAL'].size
+        sz = db[db['TARGET'] == target]['CHILD_TOTAL'].size
         x = np.linspace(xmin, xmax, sz)
         p = sp.stats.norm.pdf(x, mu, std)
-        ax[0].plot(x, p, 'k', linewidth=2)
-        ax[0].set_title(
-            'Распределение количества детей у клиентов, которые воспользовались предложением Банка')
-        ax[0].set_xlabel('Количество детей')
-        ax[0].set_ylabel('Плотность')
-        ax[0].set_ylim(0, 0.5)
+        plt.plot(x, p, 'k', linewidth=2)
+        if target == 1:
+            plt.title(
+            f'Распределение количества детей у клиентов, \n которые воспользовались предложением Банка')
+        else:
+            plt.title(
+                f'Распределение количества детей у клиентов, \n которые отказались от предложения Банка')
+        plt.xlabel('Количество детей')
+        plt.ylabel('Плотность')
+        plt.ylim(0, 0.5)
 
-        sns.histplot(db[db['TARGET'] == 0]['CHILD_TOTAL'], kde=True,
-                     stat="density", color='#4361ee', ax=ax[1])
-        mu, std = db[db['TARGET'] == 0]['CHILD_TOTAL'].mean(), \
-        db[db['TARGET'] == 0]['CHILD_TOTAL'].std()
-        xmin, xmax = plt.xlim()
-        sz = db[db['TARGET'] == 0]['CHILD_TOTAL'].size
-        x = np.linspace(xmin, xmax, sz)
-        p = sp.stats.norm.pdf(x, mu, std)
-        ax[1].plot(x, p, 'k', linewidth=2)
-        ax[1].set_title(
-            'Распределение количества детей у клиентов, которые отказались от предложения Банка')
-        ax[1].set_xlabel('Количество детей')
-        ax[1].set_ylabel('Плотность')
-        ax[1].set_ylim(0, 0.5)
+        # sns.histplot(db[db['TARGET'] == 0]['CHILD_TOTAL'], kde=True,
+        #              stat="density", color='#4361ee', ax=ax[1])
+        # mu, std = db[db['TARGET'] == 0]['CHILD_TOTAL'].mean(), \
+        # db[db['TARGET'] == 0]['CHILD_TOTAL'].std()
+        # xmin, xmax = plt.xlim()
+        # sz = db[db['TARGET'] == 0]['CHILD_TOTAL'].size
+        # x = np.linspace(xmin, xmax, sz)
+        # p = sp.stats.norm.pdf(x, mu, std)
+        # ax[1].plot(x, p, 'k', linewidth=2)
+        # ax[1].set_title(
+        #     'Распределение количества детей у клиентов, которые отказались от предложения Банка')
+        # ax[1].set_xlabel('Количество детей')
+        # ax[1].set_ylabel('Плотность')
+        # ax[1].set_ylim(0, 0.5)
 
-        return fig
+        return plt
 
     st.set_option('deprecation.showPyplotGlobalUse', False)
 
@@ -265,8 +286,6 @@ with tab2:
     personal_income = get_personal_income_target()
     fig_personal_income = plot_personal_income_chart(personal_income)
 
-    child_total = child_chart()
-
     # pair = sns.pairplot(X, height=7)
 
     st.plotly_chart(fig_education)
@@ -274,5 +293,6 @@ with tab2:
     st.plotly_chart(fig_gender)
     st.plotly_chart(fig_personal_income)
     # st.pyplot(pair)
-    st.pyplot(child_total)
+    st.pyplot(child_chart(1))
+    st.pyplot(child_chart(0))
     st.pyplot(corr_feature(X))
