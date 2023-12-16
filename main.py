@@ -58,7 +58,7 @@ st.write('Это приложение позволяет провести раз
 image = Image.open('img_1.png')
 st.image(image, use_column_width=True)
 
-tab1, tab2 = st.tabs(['Таблица', 'Разведочный анализ'])
+tab1, tab2 = st.tabs(['Таблица', 'Разведочный анализ', 'Оценка'])
 
 with tab1:
 
@@ -197,52 +197,7 @@ with tab2:
         return plt
 
 
-    # from sklearn.model_selection import train_test_split
-    # from sklearn.linear_model import LogisticRegression
-    # from sklearn.metrics import accuracy_score, classification_report
-    # from sklearn.preprocessing import MinMaxScaler, StandardScaler
-    # from sklearn.impute import SimpleImputer
-    # from sklearn.svm import SVC
-    #
-    # # Создание экземпляра SimpleImputer с стратегией замены отсутствующих значений на среднее
-    # imputer = SimpleImputer(strategy='most_frequent')
-    # db_imputed = imputer.fit_transform(db)
-    #
-    # db = pd.DataFrame(db_imputed, columns=db.columns)
-    #
-    # db_encoded = pd.get_dummies(db, columns=['EDUCATION',
-    #                                          'MARITAL_STATUS',
-    #                                          'REG_ADDRESS_PROVINCE',
-    #                                          'FACT_ADDRESS_PROVINCE',
-    #                                          'POSTAL_ADDRESS_PROVINCE',
-    #                                          'GEN_INDUSTRY', 'GEN_TITLE',
-    #                                          'JOB_DIR', 'FAMILY_INCOME'])
-    #
-    # # Подготовка данных для обучения модели
-    # X = db_encoded.drop('TARGET', axis=1)
-    # y = db_encoded['TARGET']
-    #
-    # # Разделение данных на обучающий и тестовый наборы
-    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,
-    #                                                    random_state=42)
-    # y_train = y_train.astype('bool')
-    # y_test = y_test.astype('bool')
-    # # Нормирование значений признаков с помощью Min-Max Scaling
-    # scaler = MinMaxScaler()
-    # X_train_scaled = scaler.fit_transform(X_train)
-    # X_test_scaled = scaler.transform(X_test)
-    #
-    # # Создание и обучение модели
-    # # model = LogisticRegression()
-    # model = SVC(C=1.0, kernel='rbf', gamma='scale')
-    # model.fit(X_train_scaled, y_train)
-    #
-    # # Предсказания на тестовом наборе данных
-    # y_pred = model.predict(X_test)
-    #
-    # # Оценка производительности модели
-    # print("Accuracy:", accuracy_score(y_test, y_pred))
-    # print(classification_report(y_test, y_pred))
+
 
     numerical_signs = db.drop(['EDUCATION',
                  'MARITAL_STATUS', 'REG_ADDRESS_PROVINCE',
@@ -286,3 +241,101 @@ with tab2:
         unsafe_allow_html=True
     )
     st.dataframe(db.describe())
+
+with tab3:
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import accuracy_score, classification_report
+    from sklearn.preprocessing import MinMaxScaler, StandardScaler
+    from sklearn.impute import SimpleImputer
+    from sklearn.svm import SVC
+    import streamlit as st
+    import pandas as pd
+
+    # Создание набора полей для ввода значений
+    age = st.number_input("Возраст", min_value=18, max_value=100, value=30)
+    socstatus_work = st.selectbox("Рабочий статус", ['Да', 'Нет'])
+    socstatus_pens = st.selectbox("Пенсионный статус", ['Да', 'Нет'])
+    gender = st.selectbox("Пол", ['Мужской', 'Женский'])
+    child_total = st.number_input("Общее количество детей", min_value=0,
+                                  max_value=10, value=0)
+    dependants = st.number_input("Количество иждивенцев", min_value=0,
+                                 max_value=10, value=0)
+    personal_income = st.number_input("Личный доход", min_value=0, value=50000)
+    loan_num_total = st.number_input("Общее количество кредитов", min_value=0,
+                                     value=1)
+    loan_num_closed = st.number_input("Количество закрытых кредитов",
+                                      min_value=0, value=0)
+    education = st.selectbox("Образование",
+                             ['Высшее', 'Среднее специальное', 'Среднее',
+                              'Неполное среднее'])
+    gen_title = st.selectbox("Должность", db.GEN_TITLE.unique())
+    family_income = st.number_input("Семейный доход", min_value=0, value=50000)
+    # 'Специалист', 'Руководитель среднего звена', 'Рабочий', 'Руководитель высшего звена'])
+
+    # Создание словаря с введенными значениями
+    input_data = {
+        'AGE': age,
+        'SOCSTATUS_WORK_FL': 1 if socstatus_work == 'Да' else 0,
+        'SOCSTATUS_PENS_FL': 1 if socstatus_pens == 'Да' else 0,
+        'GENDER': 1 if gender == 'Мужской' else 0,
+        'CHILD_TOTAL': child_total,
+        'DEPENDANTS': dependants,
+        'PERSONAL_INCOME': personal_income,
+        'LOAN_NUM_TOTAL': loan_num_total,
+        'LOAN_NUM_CLOSED': loan_num_closed,
+        'EDUCATION': education,
+        'GEN_TITLE': gen_title,
+        'FAMILY_INCOME': family_income
+    }
+
+    # Создание датафрейма из введенных значений
+    input_df = pd.DataFrame([input_data])
+
+
+    def forecast(input_df):
+        # Создание экземпляра SimpleImputer с стратегией замены отсутствующих значений на среднее
+        imputer = SimpleImputer(strategy='most_frequent')
+        db = db[['AGREEMENT_RK', 'TARGET', 'AGE', 'SOCSTATUS_WORK_FL',
+                 'SOCSTATUS_PENS_FL', 'GENDER', 'CHILD_TOTAL', 'DEPENDANTS',
+                 'PERSONAL_INCOME', 'LOAN_NUM_TOTAL', 'LOAN_NUM_CLOSED',
+                 'EDUCATION', 'GEN_TITLE', 'FAMILY_INCOME']]
+        db_imputed = imputer.fit_transform(db)
+
+        db = pd.DataFrame(db_imputed, columns=db.columns)
+
+        db_encoded = pd.get_dummies(db, columns=['EDUCATION', 'GEN_TITLE',
+                                                 'FAMILY_INCOME'])
+
+        # db_encoded = pd.get_dummies(db, columns=['EDUCATION',
+        #              'MARITAL_STATUS', 'REG_ADDRESS_PROVINCE',
+        #              'FACT_ADDRESS_PROVINCE', 'POSTAL_ADDRESS_PROVINCE',
+        #              'GEN_INDUSTRY', 'GEN_TITLE', 'JOB_DIR', 'FAMILY_INCOME'])
+
+        # Подготовка данных для обучения модели
+        X = db_encoded.drop('TARGET', axis=1)
+        y = db_encoded['TARGET']
+
+        # Разделение данных на обучающий и тестовый наборы
+        X_train, X_test, y_train, y_test = train_test_split(X, y,
+                                                            test_size=0.2,
+                                                            random_state=42)
+        y_train = y_train.astype('bool')
+        y_test = y_test.astype('bool')
+        # Нормирование значений признаков с помощью Min-Max Scaling
+        scaler = MinMaxScaler()
+        X_train_scaled = scaler.fit_transform(X_train)
+        X_test_scaled = scaler.transform(X_test)
+
+        # Создание и обучение модели логистической регрессии
+        # model = LogisticRegression()
+        model = SVC(C=1.0, kernel='rbf', gamma='scale')
+        model.fit(X_train_scaled, y_train)
+
+        # Предсказания на тестовом наборе данных
+        y_pred = model.predict(input_df)
+
+        # Оценка производительности модели
+        # print("Accuracy:", accuracy_score(y_test, y_pred))
+        # print(classification_report(y_test, y_pred))
+        return st.write("Предсказанный результат:", y_pred)
