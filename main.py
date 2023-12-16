@@ -240,9 +240,8 @@ with tab2:
                  'MARITAL_STATUS', 'REG_ADDRESS_PROVINCE',
                  'FACT_ADDRESS_PROVINCE', 'POSTAL_ADDRESS_PROVINCE',
                  'FAMILY_INCOME', 'GEN_INDUSTRY', 'GEN_TITLE', 'JOB_DIR',
-                 'COMMENT', 'COMMENT_2', 'ID_CLIENT', 'ID_CLIENT_2',
-                 'ID_CLIENT_3', 'ID_LOAN_2', 'ID_CLIENT_4', 'ID_2', 'ID_3',
-                 'FLAG_2'], axis=1)
+                 'ID_CLIENT', 'ID_CLIENT_2',
+                 'ID_CLIENT_3', 'ID_LOAN_2', 'ID_CLIENT_4', 'ID_2'], axis=1)
 
     target_tab_1 = st.checkbox('Откликнулись на предложение')
     target_tab_0 = st.checkbox('Отказались от предложения')
