@@ -10,6 +10,7 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy as sp
+import sklearn as sk
 
 
 D_clients = duckdb.read_csv('datasets/D_clients.csv')
@@ -48,7 +49,7 @@ ON D_clients.ID = t2.ID
 '''
 db = duckdb.query(q).to_df().drop(['ID_CLIENT', 'ID_CLIENT_2',
                  'ID_CLIENT_3', 'ID_LOAN_2', 'ID_CLIENT_4', 'ID_2',
-                 'CLOSED_FL_2', 'FAMILY_INCOME', 'AGREEMENT_RK', 'ID_LOAN'], axis=1)
+                 'CLOSED_FL_2', 'ID_LOAN'], axis=1)
 
 st.title('Анализ клиентов банка')
 st.write('Это приложение позволяет провести разведочный анализ данных, софрмировать портрет клиентов, '
@@ -196,10 +197,57 @@ with tab2:
         return plt
 
 
+    # from sklearn.model_selection import train_test_split
+    # from sklearn.linear_model import LogisticRegression
+    # from sklearn.metrics import accuracy_score, classification_report
+    # from sklearn.preprocessing import MinMaxScaler, StandardScaler
+    # from sklearn.impute import SimpleImputer
+    # from sklearn.svm import SVC
+    #
+    # # Создание экземпляра SimpleImputer с стратегией замены отсутствующих значений на среднее
+    # imputer = SimpleImputer(strategy='most_frequent')
+    # db_imputed = imputer.fit_transform(db)
+    #
+    # db = pd.DataFrame(db_imputed, columns=db.columns)
+    #
+    # db_encoded = pd.get_dummies(db, columns=['EDUCATION',
+    #                                          'MARITAL_STATUS',
+    #                                          'REG_ADDRESS_PROVINCE',
+    #                                          'FACT_ADDRESS_PROVINCE',
+    #                                          'POSTAL_ADDRESS_PROVINCE',
+    #                                          'GEN_INDUSTRY', 'GEN_TITLE',
+    #                                          'JOB_DIR', 'FAMILY_INCOME'])
+    #
+    # # Подготовка данных для обучения модели
+    # X = db_encoded.drop('TARGET', axis=1)
+    # y = db_encoded['TARGET']
+    #
+    # # Разделение данных на обучающий и тестовый наборы
+    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,
+    #                                                    random_state=42)
+    # y_train = y_train.astype('bool')
+    # y_test = y_test.astype('bool')
+    # # Нормирование значений признаков с помощью Min-Max Scaling
+    # scaler = MinMaxScaler()
+    # X_train_scaled = scaler.fit_transform(X_train)
+    # X_test_scaled = scaler.transform(X_test)
+    #
+    # # Создание и обучение модели
+    # # model = LogisticRegression()
+    # model = SVC(C=1.0, kernel='rbf', gamma='scale')
+    # model.fit(X_train_scaled, y_train)
+    #
+    # # Предсказания на тестовом наборе данных
+    # y_pred = model.predict(X_test)
+    #
+    # # Оценка производительности модели
+    # print("Accuracy:", accuracy_score(y_test, y_pred))
+    # print(classification_report(y_test, y_pred))
+
     numerical_signs = db.drop(['SOCSTATUS_WORK_FL', 'SOCSTATUS_PENS_FL', 'EDUCATION',
                  'MARITAL_STATUS', 'REG_ADDRESS_PROVINCE',
                  'FACT_ADDRESS_PROVINCE', 'POSTAL_ADDRESS_PROVINCE',
-                 'GEN_INDUSTRY', 'GEN_TITLE', 'JOB_DIR'], axis=1)
+                 'GEN_INDUSTRY', 'GEN_TITLE', 'JOB_DIR', 'FAMILY_INCOME', 'AGREEMENT_RK'], axis=1)
 
 
 
