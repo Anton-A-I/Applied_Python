@@ -264,6 +264,6 @@ with tab2:
     st.plotly_chart(fig_age)
     st.plotly_chart(fig_gender)
     st.plotly_chart(fig_personal_income)
-    st.pyplot(pair)
+    # st.pyplot(pair)
     st.pyplot(child_total)
     st.pyplot(corr_feature(X))
