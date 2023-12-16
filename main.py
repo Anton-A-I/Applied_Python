@@ -23,18 +23,28 @@ D_salary = duckdb.read_csv('datasets/D_salary.csv')
 D_target = duckdb.read_csv('datasets/D_target.csv')
 
 q = '''
-SELECT DISTINCT *
+SELECT *
 FROM D_clients
 JOIN D_target ON D_clients.ID = D_target.ID_CLIENT
 JOIN D_salary ON D_clients.ID = D_salary.ID_CLIENT
 JOIN D_loan ON D_clients.ID = D_loan.ID_CLIENT
 JOIN D_close_loan ON D_close_loan.ID_LOAN = D_loan.ID_LOAN
 JOIN D_job ON D_clients.ID = D_job.ID_CLIENT
-JOIN D_work ON D_clients.SOCSTATUS_WORK_FL = D_work.ID
-JOIN D_pens ON D_clients.SOCSTATUS_PENS_FL = D_pens.ID
---JOIN D_work ON D_clients.ID = D_work.ID
---SELECT *
---FROM D_pens
+JOIN 
+(SELECT t1.ID, 
+CAST(t1.CLOSED_FL AS INT64) AS CLOSED_FL, 
+COUNT(t1.ID_LOAN) as "LOAN_NUM_TOTAL",
+CAST(SUM(t1.CLOSED_FL) AS INT64) as " LOAN_NUM_CLOSED"
+FROM 
+(SELECT *
+FROM D_clients
+JOIN D_target ON D_clients.ID = D_target.ID_CLIENT
+JOIN D_salary ON D_clients.ID = D_salary.ID_CLIENT
+JOIN D_loan ON D_clients.ID = D_loan.ID_CLIENT
+JOIN D_close_loan ON D_close_loan.ID_LOAN = D_loan.ID_LOAN
+JOIN D_job ON D_clients.ID = D_job.ID_CLIENT) as t1
+GROUP BY ID, CLOSED_FL) as t2
+ON D_clients.ID = t2.ID
 '''
 db = duckdb.query(q).to_df()
 
