@@ -186,7 +186,7 @@ with tab2:
 
     st.set_option('deprecation.showPyplotGlobalUse', False)
 
-    def corr_feature(X):
+    def corr_feature(numerical_signs):
         corr = X.corr()
         plt.figure(figsize=(15, 11))
         sns.heatmap(corr,fmt='.3f', annot=True, cmap='PuRd', linewidths=.5)
@@ -194,12 +194,15 @@ with tab2:
         return plt
 
 
-    X = db.drop(['SOCSTATUS_WORK_FL', 'SOCSTATUS_PENS_FL', 'EDUCATION',
+    numerical_signs = db.drop(['SOCSTATUS_WORK_FL', 'SOCSTATUS_PENS_FL', 'EDUCATION',
                  'MARITAL_STATUS', 'REG_ADDRESS_PROVINCE',
                  'FACT_ADDRESS_PROVINCE', 'POSTAL_ADDRESS_PROVINCE',
                  'FAMILY_INCOME', 'GEN_INDUSTRY', 'GEN_TITLE', 'JOB_DIR',
                  'ID_CLIENT', 'ID_CLIENT_2',
-                 'ID_CLIENT_3', 'ID_LOAN_2', 'ID_CLIENT_4', 'ID_2'], axis=1)
+                 'ID_CLIENT_3', 'ID_LOAN_2', 'ID_CLIENT_4', 'ID_2',
+                 'CLOSED_FL_2', 'AGREEMENT_RK', 'ID_LOAN'], axis=1)
+
+
 
     target_tab_1 = st.checkbox('Откликнулись на предложение')
     target_tab_0 = st.checkbox('Отказались от предложения')
@@ -230,7 +233,7 @@ with tab2:
     st.plotly_chart(fig_personal_income)
     st.pyplot(child_chart(1))
     st.pyplot(child_chart(0))
-    st.pyplot(corr_feature(X))
+    st.pyplot(corr_feature(numerical_signs))
     st.markdown(
         "<p style='font-size: 16px; font-weight: bold;'>Вычисление числовых характеристик распределения числовых столбцов</p>",
         unsafe_allow_html=True
