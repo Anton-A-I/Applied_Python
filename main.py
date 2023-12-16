@@ -219,7 +219,13 @@ with tab2:
 
     st.set_option('deprecation.showPyplotGlobalUse', False)
 
-    def corr_feature
+    def corr_feature(X):
+        corr = X.corr()
+        plt.figure(figsize=(15, 11))
+        sns.heatmap(corr,fmt='.3f', annot=True, cmap='PuRd', linewidths=.5)
+        return plt
+
+
     X = db.drop(['SOCSTATUS_WORK_FL', 'SOCSTATUS_PENS_FL', 'EDUCATION',
                  'MARITAL_STATUS', 'REG_ADDRESS_PROVINCE',
                  'FACT_ADDRESS_PROVINCE', 'POSTAL_ADDRESS_PROVINCE',
@@ -227,11 +233,6 @@ with tab2:
                  'COMMENT', 'COMMENT_2', 'ID_CLIENT', 'ID_CLIENT_2',
                  'ID_CLIENT_3', 'ID_LOAN_2', 'ID_CLIENT_4', 'ID_2', 'ID_3',
                  'FLAG_2'], axis=1)
-    corr = X.corr()
-    plt.figure(figsize=(15, 11))
-    sns.heatmap(corr,fmt='.3f', annot=True, cmap='PuRd', linewidths=.5)
-    # plt.show()
-    st.pyplot()
 
     target_tab_1 = st.checkbox('Откликнулись на предложение')
     target_tab_0 = st.checkbox('Отказались от предложения')
@@ -265,3 +266,4 @@ with tab2:
     st.plotly_chart(fig_personal_income)
     st.pyplot(pair)
     st.pyplot(child_total)
+    st.pyplot(corr_feature(X))
