@@ -334,7 +334,7 @@ with tab3:
     st.experimental_set_query_params(**input_state)
 
     # Создание датафрейма из введенных значений
-    input_df = pd.DataFrame([input_data])
+    input_df = pd.DataFrame([input_state])
 
 
     def forecast(input_df, db):
