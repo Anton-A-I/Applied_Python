@@ -23,7 +23,7 @@ D_salary = duckdb.read_csv('datasets/D_salary.csv')
 D_target = duckdb.read_csv('datasets/D_target.csv')
 
 q = '''
-SELECT *
+SELECT DISTINCT *
 FROM D_clients
 JOIN D_target ON D_clients.ID = D_target.ID_CLIENT
 JOIN D_salary ON D_clients.ID = D_salary.ID_CLIENT
