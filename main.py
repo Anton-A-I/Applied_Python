@@ -58,7 +58,7 @@ st.write('Это приложение позволяет провести раз
 image = Image.open('img_1.png')
 st.image(image, use_column_width=True)
 
-tab1, tab2 = st.tabs(['Таблица', 'Разведочный анализ', 'Оценка'])
+tab1, tab2, tab3 = st.tabs(['Таблица', 'Разведочный анализ', 'Оценка'])
 
 with tab1:
 
