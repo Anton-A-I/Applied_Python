@@ -238,6 +238,7 @@ with tab2:
         corr = X.corr()
         plt.figure(figsize=(15, 11))
         sns.heatmap(corr,fmt='.3f', annot=True, cmap='PuRd', linewidths=.5)
+        plt.title('Матрица корреляций')
         return plt
 
 
@@ -280,4 +281,5 @@ with tab2:
     st.pyplot(child_chart(1))
     st.pyplot(child_chart(0))
     st.pyplot(corr_feature(X))
+    st.text('Вычисление числовых характеристик распределения числовых столбцов')
     st.dataframe(db.describe())
