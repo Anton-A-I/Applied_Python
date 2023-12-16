@@ -290,7 +290,7 @@ with tab3:
 
 
     # Создание датафрейма из введенных значений
-    input_df = pd.DataFrame([input_state])
+    input_df = pd.DataFrame([input_data])
 
 
     def forecast(input_df, db):
