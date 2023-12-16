@@ -9,7 +9,8 @@ import plotly as plt
 from PIL import Image
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.stats import norm
+import scipy as sp
+
 
 D_clients = duckdb.read_csv('datasets/D_clients.csv')
 D_job = duckdb.read_csv('datasets/D_job.csv')
@@ -191,7 +192,7 @@ with tab2:
         xmin, xmax = plt.xlim()
         sz = db[db['TARGET'] == 1]['CHILD_TOTAL'].size
         x = np.linspace(xmin, xmax, sz)
-        p = norm.pdf(x, mu, std)
+        p = sp.stats.norm.pdf(x, mu, std)
         ax[0].plot(x, p, 'k', linewidth=2)
         ax[0].set_title(
             'Распределение количества детей у клиентов, которые воспользовались предложением Банка')
@@ -218,6 +219,7 @@ with tab2:
 
     st.set_option('deprecation.showPyplotGlobalUse', False)
 
+    def corr_feature
     X = db.drop(['SOCSTATUS_WORK_FL', 'SOCSTATUS_PENS_FL', 'EDUCATION',
                  'MARITAL_STATUS', 'REG_ADDRESS_PROVINCE',
                  'FACT_ADDRESS_PROVINCE', 'POSTAL_ADDRESS_PROVINCE',
