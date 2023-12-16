@@ -254,24 +254,23 @@ with tab3:
 
     # Создание набора полей для ввода значений
     age = st.number_input("Возраст", min_value=18, max_value=100, value=30)
-    socstatus_work = st.selectbox("Рабочий статус", ['Да', 'Нет'])
-    socstatus_pens = st.selectbox("Пенсионный статус", ['Да', 'Нет'])
-    gender = st.selectbox("Пол", ['Мужской', 'Женский'])
-    child_total = st.number_input("Общее количество детей", min_value=0,
-                                  max_value=10, value=0)
+    socstatus_work = st.radio("Трудоустроен", ['Да', 'Нет'])
+    socstatus_work_numeric = 1 if socstatus_work == 'Да' else 0
+    socstatus_pens = st.radio("Пенсионер", ['Да', 'Нет'])
+    socstatus_pens_numeric = 1 if socstatus_pens == 'Да' else 0
+    gender = st.selectbox("Пол", db.GENDER.unique())
+    child_total = st.number_input("Количество детей", min_value=0,
+                                  max_value=15, value=0)
     dependants = st.number_input("Количество иждивенцев", min_value=0,
-                                 max_value=10, value=0)
+                                 max_value=15, value=0)
     personal_income = st.number_input("Личный доход", min_value=0, value=50000)
     loan_num_total = st.number_input("Общее количество кредитов", min_value=0,
                                      value=1)
     loan_num_closed = st.number_input("Количество закрытых кредитов",
                                       min_value=0, value=0)
-    education = st.selectbox("Образование",
-                             ['Высшее', 'Среднее специальное', 'Среднее',
-                              'Неполное среднее'])
+    education = st.selectbox("Образование", db.EDUCATION.unique())
     gen_title = st.selectbox("Должность", db.GEN_TITLE.unique())
     family_income = st.number_input("Семейный доход", min_value=0, value=50000)
-    # 'Специалист', 'Руководитель среднего звена', 'Рабочий', 'Руководитель высшего звена'])
 
     # Создание словаря с введенными значениями
     input_data = {
@@ -338,4 +337,9 @@ with tab3:
         # Оценка производительности модели
         # print("Accuracy:", accuracy_score(y_test, y_pred))
         # print(classification_report(y_test, y_pred))
-        return st.write("Предсказанный результат:", y_pred)
+        return st.write("Предсказанное значение целевой переменной:", y_pred)
+
+
+    if st.button('Предсказать'):
+        # Вызов функции для предсказания значения целевой переменной
+        forecast(input_df)
