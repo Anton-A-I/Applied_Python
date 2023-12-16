@@ -178,29 +178,13 @@ with tab2:
                                  mode='lines', fill='tozeroy',
                                  marker_color='#4361ee',
                                  name='Откликнулись на предложение банка',
-                                 opacity=0.5, showlegend=False ))
+                                 opacity=0.5, textposition='bottom center' ))
         fig.add_trace(go.Scatter(x=db[db['TARGET'] == 0].groupby('PERSONAL_INCOME').size().reset_index(name='COUNT')['PERSONAL_INCOME'], y = db[db['TARGET'] == 0].groupby('PERSONAL_INCOME').size().reset_index(name='COUNT')['COUNT'],
                                  mode='lines', fill='tozeroy',
                                  marker_color='#f72585',
                                  name='Отказались от предложения банка',
-                                 opacity=0.5, showlegend=False ))
-        fig.add_trace(go.Scatter(
-            x=[],
-            y=[],
-            mode='lines',
-            fill='tozeroy',
-            marker_color='#ffffff',
-            name='Легенда',
-            showlegend=True
-        ))
+                                 opacity=0.5, textposition='bottom center' ))
 
-        fig.update_layout(legend=dict(
-            orientation="h",  # Ориентация легенды (горизонтальная)
-            yanchor="bottom",  # Якорная точка по оси Y (снизу)
-            y=1.02,  # Положение легенды по оси Y
-            xanchor="ctnter",  # Якорная точка по оси X (справа)
-            x=1  # Положение легенды по оси X
-        ))
         fig.update_layout(xaxis=dict(range=[0, 100000]))
 
         fig.update_layout(title='Распределение зарплаты',
