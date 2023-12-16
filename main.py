@@ -259,7 +259,7 @@ with tab3:
             'AGE': 30,
             'SOCSTATUS_WORK_FL': 1,
             'SOCSTATUS_PENS_FL': 0,
-            'GENDER': 0,
+            'GENDER': 1,
             'CHILD_TOTAL': 0,
             'DEPENDANTS': 0,
             'PERSONAL_INCOME': 50000,
@@ -290,7 +290,7 @@ with tab3:
 
     # Создание набора полей для ввода значений
     age = st.number_input("Возраст", min_value=18, max_value=100,
-                          value=input_state['AGE'])
+                          value=int(input_state['AGE']))
     socstatus_work = st.radio("Трудоустроен", ['Да', 'Нет'],
                               index=0 if input_state[
                                              'SOCSTATUS_WORK_FL'] == 1 else 1)
@@ -298,7 +298,7 @@ with tab3:
                               index=0 if input_state[
                                              'SOCSTATUS_PENS_FL'] == 1 else 1)
     gender = st.selectbox("Пол", db.GENDER.unique(),
-                          index=input_state['GENDER'])
+                          index=int(input_state['GENDER']))
     child_total = st.number_input("Количество детей", min_value=0,
                                   max_value=15,
                                   value=input_state['CHILD_TOTAL'])
