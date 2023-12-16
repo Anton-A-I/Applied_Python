@@ -244,7 +244,7 @@ with tab2:
     # print("Accuracy:", accuracy_score(y_test, y_pred))
     # print(classification_report(y_test, y_pred))
 
-    numerical_signs = db.drop(['SOCSTATUS_WORK_FL', 'SOCSTATUS_PENS_FL', 'EDUCATION',
+    numerical_signs = db.drop(['EDUCATION',
                  'MARITAL_STATUS', 'REG_ADDRESS_PROVINCE',
                  'FACT_ADDRESS_PROVINCE', 'POSTAL_ADDRESS_PROVINCE',
                  'GEN_INDUSTRY', 'GEN_TITLE', 'JOB_DIR', 'FAMILY_INCOME', 'AGREEMENT_RK'], axis=1)
