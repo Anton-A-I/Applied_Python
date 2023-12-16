@@ -63,14 +63,45 @@ with tab1:
     target_0 = st.checkbox('Отказались от предложения банка')
     if target_1 & target_0:
         filtred_df = db
-    if target_1:
+    if target_1:  # Если пользователь выбрал только мужчин
         filtred_df = db[db['TARGET'] == 1]
-    elif target_0:
+    elif target_0:  # Если пользователь выбрал только женщин
         filtred_df = db[db['TARGET'] == 0]
     else:
         filtred_df = db
     st.dataframe(filtred_df)
 
+    # if age_filter[0] == 0 and age_filter[1] == 100:
+        # if gender_1 and gender_0:  # Если пользователь выбрал оба значения пола
+        #     filtered_df = db
+        # elif gender_1:  # Если пользователь выбрал только мужчин
+        #     filtered_df = db[db['GENDER'] == 1]
+        # elif gender_0:  # Если пользователь выбрал только женщин
+        #     filtered_df = db[db['GENDER'] == 0]
+        # else:  # Если пользователь не выбрал значения пола
+        # filtered_df = db
+
+    # else:  # Если пользователь выбрал фильтр по возрасту
+    #     filtered_df = db[(db['AGE'] >= age_filter[0]) & (db['AGE'] <= age_filter[1])]
+    #     st.dataframe(filtered_df)
+    #     if gender_1:  # Если пользователь выбрал только мужчин
+    #         filtered_df = filtered_df[filtered_df['GENDER'] == 1]
+    #         st.dataframe(filtered_df)
+    #     elif gender_0:  # Если пользователь выбрал только женщин
+    #         filtered_df = filtered_df[filtered_df['GENDER'] == 0]
+    #         st.dataframe(filtered_df)
+    #     else:
+    #         filtered_df = db[(db['AGE'] >= age_filter[0]) & (db['AGE'] <= age_filter[1])]
+    #         st.dataframe(filtered_df)
+    # filtered_df = db[(db['AGE'] >= age_filter[0]) & (db['AGE'] <= age_filter[1])]
+    # if gender_1:
+    #     filtred_df = filtred_df[(filtred_df['GENDER'] == 1)]
+    #     st.dataframe(filtered_gender)
+    # elif gender_0:
+    #     filtred_gender = filtred_df[(filtred_df['GENDER'] == 0)]
+    #     st.dataframe(filtered_gender)
+    # else:
+    #     st.dataframe(filtered_df)
 with tab2:
     st.write('Разведочный анализ')
 
@@ -182,6 +213,23 @@ with tab2:
                 f'Распределение количества детей у клиентов, \n которые отказались от предложения Банка')
         plt.xlabel('Количество детей')
         plt.ylabel('Плотность')
+        # plt.ylim(0, 0.5)
+
+        # sns.histplot(db[db['TARGET'] == 0]['CHILD_TOTAL'], kde=True,
+        #              stat="density", color='#4361ee', ax=ax[1])
+        # mu, std = db[db['TARGET'] == 0]['CHILD_TOTAL'].mean(), \
+        # db[db['TARGET'] == 0]['CHILD_TOTAL'].std()
+        # xmin, xmax = plt.xlim()
+        # sz = db[db['TARGET'] == 0]['CHILD_TOTAL'].size
+        # x = np.linspace(xmin, xmax, sz)
+        # p = sp.stats.norm.pdf(x, mu, std)
+        # ax[1].plot(x, p, 'k', linewidth=2)
+        # ax[1].set_title(
+        #     'Распределение количества детей у клиентов, которые отказались от предложения Банка')
+        # ax[1].set_xlabel('Количество детей')
+        # ax[1].set_ylabel('Плотность')
+        # ax[1].set_ylim(0, 0.5)
+
         return plt
 
     st.set_option('deprecation.showPyplotGlobalUse', False)
@@ -223,11 +271,13 @@ with tab2:
     personal_income = get_personal_income_target()
     fig_personal_income = plot_personal_income_chart(personal_income)
 
+    # pair = sns.pairplot(X, height=7)
 
     st.plotly_chart(fig_education)
     st.plotly_chart(fig_age)
     st.plotly_chart(fig_gender)
     st.plotly_chart(fig_personal_income)
+    # st.pyplot(pair)
     st.pyplot(child_chart(1))
     st.pyplot(child_chart(0))
     st.pyplot(corr_feature(X))
