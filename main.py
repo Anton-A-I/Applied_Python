@@ -189,7 +189,7 @@ with tab2:
     st.set_option('deprecation.showPyplotGlobalUse', False)
 
     def corr_feature(numerical_signs):
-        corr = X.corr()
+        corr = numerical_signs.corr()
         plt.figure(figsize=(15, 11))
         sns.heatmap(corr,fmt='.3f', annot=True, cmap='PuRd', linewidths=.5)
         plt.title('Матрица корреляций', fontdict={'fontsize': 16, 'fontweight': 'bold'})
