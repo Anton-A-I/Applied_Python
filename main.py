@@ -359,7 +359,7 @@ with (tab3):
         text_color = 'rgba(0, 128, 0, 0.8)' if y_pred == 1 else 'rgba(255, 0, 0, 0.8)'
         predict = 'Скорее всего откликнется на предложение Банка' if y_pred == 1 else 'Скорее всего отклонит предложение Банка'
         st.markdown(f'''
-            <div style="border: 2px solid {color}; background-color: {color}; padding: 10px; text-align: center">
+            <div style="border: 2px solid {color}; background-color: {color}; padding: 10px; border-radius: 10px; text-align: center">
                 <span style="color: {text_color};">{predict}</span>
             </div>
         ''', unsafe_allow_html = True)
