@@ -355,8 +355,8 @@ with (tab3):
     if submit_button:
         # Вызов функции для предсказания значения целевой переменной
         y_pred = forecast(input_df, db)
-        color = 'green' if y_pred == 1 else 'red'
-        text_color = 'blue' if y_pred == 1 else 'blue'
+        color = 'rgba(0, 128, 0, 0.3)' if y_pred == 1 else 'rgba(255, 0, 0, 0.3)'
+        text_color = 'rgba(0, 128, 0, 0.8)' if y_pred == 1 else 'rgba(255, 0, 0, 0.8)'
         predict = 'Скорее всего откликнется на предложение Банка' if y_pred == 1 else 'Скорее всего отклонит предложение Банка'
         st.markdown(f'''
             <div style="border: 2px solid {color}; background-color: {color}; padding: 10px; text-align: center">
