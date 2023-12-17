@@ -257,7 +257,7 @@ with (tab3):
         age = st.number_input("Возраст", min_value=18, max_value=100, value=30)
         socstatus_work = st.radio("Трудоустроен", ['Да', 'Нет'])
         socstatus_pens = st.radio("Пенсионер", ['Да', 'Нет'])
-        gender = st.selectbox("Пол", db.GENDER.unique())
+        gender = st.selectbox("Пол", ['Мужской', 'Женский'])
         child_total = st.number_input("Количество детей", min_value=0,
                                       max_value=15, value=0)
         dependants = st.number_input("Количество иждивенцев", min_value=0,
@@ -363,12 +363,10 @@ with (tab3):
         text_color = 'rgba(0, 128, 0, 0.8)' if y_pred == 1 else 'rgba(255, 0, 0, 0.8)'
         predict = 'Скорее всего откликнется на предложение Банка' if y_pred == 1 else 'Скорее всего отклонит предложение Банка'
         st.markdown(f'''
-                    <div style="border: 2px solid {color_acc}; background-color: {color_acc}; padding: 10px; border-radius: 10px; text-align: center">
+                    <div style="border: 2px solid {color_acc}; background-color: {color_acc}; padding: 10px; border-radius: 10px; text-align: center; margin-top: 20px">
                         <span style="color: {text_color_acc};">Точность оценки: {accuracy}</span>
                     </div>
-                    <div>
                     
-                    </div>
                 ''', unsafe_allow_html=True)
         st.markdown(f'''
             <div style="border: 2px solid {color}; background-color: {color}; padding: 10px; border-radius: 10px; text-align: center">
