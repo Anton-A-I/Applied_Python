@@ -242,7 +242,7 @@ with tab2:
     )
     st.dataframe(db.describe())
 
-with tab3:
+with (tab3):
     from sklearn.model_selection import train_test_split
     from sklearn.linear_model import LogisticRegression
     from sklearn.metrics import accuracy_score, classification_report
@@ -348,9 +348,13 @@ with tab3:
         # Предсказания на тестовом наборе данных
         y_pred = model.predict(X_input_scaled)
 
-        return st.write("Предсказанное значение целевой переменной:", y_pred)
+        return y_pred
+        # st.write("Предсказанное значение целевой переменной:", y_pred)
 
 
     if submit_button:
         # Вызов функции для предсказания значения целевой переменной
-        forecast(input_df, db)
+        y_pred = forecast(input_df, db)
+        color = 'green' if y_pred == 1 else 'red'
+        st.markdown(f'<p style="color: {color};">Предсказанное значение целевой переменной: {y_pred}</p>',
+                    unsafe_allow_html=True)
