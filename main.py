@@ -356,5 +356,12 @@ with (tab3):
         # Вызов функции для предсказания значения целевой переменной
         y_pred = forecast(input_df, db)
         color = 'green' if y_pred == 1 else 'red'
-        st.markdown(f'<p style="color: {color};">Предсказанное значение целевой переменной: {y_pred}</p>',
-                    unsafe_allow_html=True)
+        text_color = 'blue' if y_pred == 1 else 'blue'
+        predict = 'Скорее всего откликнется на предложение Банка' if y_pred == 1 else 'Скорее всего отклонит предложение Банка'
+        st.markdown(f'''
+            <div style="border: 2px solid {color}; background-color: {color}; padding: 10px; text-align: center">
+                <span style="color: {text_color};">{predict}</span>
+            </div>
+        ''', unsafe_allow_html = True)
+        # st.markdown(f'<p style="color: {color};"> {predict}</p>',
+        #             unsafe_allow_html=True)
