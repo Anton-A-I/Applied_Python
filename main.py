@@ -348,7 +348,7 @@ with (tab3):
         # Предсказания на тестовом наборе данных
         y_pred = model.predict(X_input_scaled)
 
-        y_acc = model.predict(X_test)
+        y_acc = model.predict(X_test_scaled)
         accuracy = accuracy_score(y_test, y_acc)
         return y_pred, accuracy
         # st.write("Предсказанное значение целевой переменной:", y_pred)
@@ -364,7 +364,10 @@ with (tab3):
         predict = 'Скорее всего откликнется на предложение Банка' if y_pred == 1 else 'Скорее всего отклонит предложение Банка'
         st.markdown(f'''
                     <div style="border: 2px solid {color_acc}; background-color: {color_acc}; padding: 10px; border-radius: 10px; text-align: center">
-                        <span style="color: {text_color_acc};">"Точность оценки": {accuracy}</span>
+                        <span style="color: {text_color_acc};">Точность оценки: {accuracy}</span>
+                    </div>
+                    <div>
+                    
                     </div>
                 ''', unsafe_allow_html=True)
         st.markdown(f'''
