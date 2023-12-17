@@ -296,17 +296,27 @@ with tab3:
     def forecast(input_df, db):
         # Создание экземпляра SimpleImputer с стратегией замены отсутствующих значений на среднее
         imputer = SimpleImputer(strategy='most_frequent')
-        db = db[['TARGET', 'AGE', 'SOCSTATUS_WORK_FL',
-                 'SOCSTATUS_PENS_FL', 'GENDER', 'CHILD_TOTAL', 'DEPENDANTS',
-                 'PERSONAL_INCOME', 'LOAN_NUM_TOTAL', 'LOAN_NUM_CLOSED',
-                 'EDUCATION', 'GEN_TITLE', 'FAMILY_INCOME']]
+        db = db[['TARGET', 'AGE', 'SOCSTATUS_WORK_FL', 'SOCSTATUS_PENS_FL',
+                 'GENDER', 'CHILD_TOTAL', 'DEPENDANTS', 'PERSONAL_INCOME',
+                 'LOAN_NUM_TOTAL', 'LOAN_NUM_CLOSED', 'EDUCATION', 'GEN_TITLE',
+                 'FAMILY_INCOME']]
         db_imputed = imputer.fit_transform(db)
 
         db = pd.DataFrame(db_imputed, columns=db.columns)
 
         db_encoded = pd.get_dummies(db, columns=['EDUCATION', 'GEN_TITLE',
                                                  'FAMILY_INCOME'])
-
+        input_df_encoded = pd.get_dummies(input_df,
+                                          columns=['EDUCATION', 'GEN_TITLE',
+                                                   'FAMILY_INCOME'])
+        missing_columns = set(db_encoded.columns) - set(
+            input_df_encoded.columns)
+        for col in missing_columns:
+            input_df_encoded[col] = 0
+        column_order = db_encoded.columns
+        input_df_encoded = input_df_encoded.reindex(columns=column_order,
+                                                    fill_value=0).drop(
+            'TARGET', axis=1)
         # db_encoded = pd.get_dummies(db, columns=['EDUCATION',
         #              'MARITAL_STATUS', 'REG_ADDRESS_PROVINCE',
         #              'FACT_ADDRESS_PROVINCE', 'POSTAL_ADDRESS_PROVINCE',
@@ -322,22 +332,22 @@ with tab3:
                                                             random_state=42)
         y_train = y_train.astype('bool')
         y_test = y_test.astype('bool')
+
         # Нормирование значений признаков с помощью Min-Max Scaling
         scaler = MinMaxScaler()
         X_train_scaled = scaler.fit_transform(X_train)
         X_test_scaled = scaler.transform(X_test)
+        X_input_scaled = scaler.transform(input_df_encoded)
+
 
         # Создание и обучение модели логистической регрессии
         # model = LogisticRegression()
         model = SVC(C=1.0, kernel='rbf', gamma='scale')
-        model.fit(X_train_scaled, y_train)
+        model.fit(X_train, y_train)
 
         # Предсказания на тестовом наборе данных
-        y_pred = model.predict(input_df)
+        y_pred = model.predict(X_input_scaled)
 
-        # Оценка производительности модели
-        # print("Accuracy:", accuracy_score(y_test, y_pred))
-        # print(classification_report(y_test, y_pred))
         return st.write("Предсказанное значение целевой переменной:", y_pred)
 
 
