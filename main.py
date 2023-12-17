@@ -348,16 +348,25 @@ with (tab3):
         # Предсказания на тестовом наборе данных
         y_pred = model.predict(X_input_scaled)
 
-        return y_pred
+        y_acc = model.predict(X_test)
+        accuracy = accuracy_score(y_test, y_acc)
+        return y_pred, accuracy
         # st.write("Предсказанное значение целевой переменной:", y_pred)
 
 
     if submit_button:
         # Вызов функции для предсказания значения целевой переменной
-        y_pred = forecast(input_df, db)
+        y_pred, accuracy = forecast(input_df, db)
         color = 'rgba(0, 128, 0, 0.3)' if y_pred == 1 else 'rgba(255, 0, 0, 0.3)'
+        color_acc = 'rgba(252, 252, 225, 0.8)'
+        text_color_acc = 'rgba(185, 186, 117, 1)'
         text_color = 'rgba(0, 128, 0, 0.8)' if y_pred == 1 else 'rgba(255, 0, 0, 0.8)'
         predict = 'Скорее всего откликнется на предложение Банка' if y_pred == 1 else 'Скорее всего отклонит предложение Банка'
+        st.markdown(f'''
+                    <div style="border: 2px solid {color_acc}; background-color: {color_acc}; padding: 10px; border-radius: 10px; text-align: center">
+                        <span style="color: {text_color_acc};">"Точность оценки": {accuracy}</span>
+                    </div>
+                ''', unsafe_allow_html=True)
         st.markdown(f'''
             <div style="border: 2px solid {color}; background-color: {color}; padding: 10px; border-radius: 10px; text-align: center">
                 <span style="color: {text_color};">{predict}</span>
