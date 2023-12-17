@@ -343,7 +343,7 @@ with (tab3):
         # Создание и обучение модели логистической регрессии
         # model = LogisticRegression()
         model = SVC(C=1.0, kernel='rbf', gamma='scale')
-        model.fit(X_train, y_train)
+        model.fit(X_train_scaled, y_train)
 
         # Предсказания на тестовом наборе данных
         y_pred = model.predict(X_input_scaled)
